@@ -80,7 +80,9 @@ public class GameScreen extends Base2DScreen {
         textDecalSystem = AshleyWorld.getEngine().getSystem( TextDecalSystem.class );
         textDecalSystem.init();
 
-        playerSystem = AshleyWorld.getEngine().getSystem( MyPlayerSystem.class );
+        playerSystem = AshleyWorld
+                .getEngine()
+                .getSystem( MyPlayerSystem.class );
 
         //AshleyWorld.getEngine().getSystem( NPCSystem.class ).setWalkSound();
 
@@ -126,7 +128,7 @@ public class GameScreen extends Base2DScreen {
         EntityBuilder.createPlayer( ModelAsset.TEST_NPC.get(),
                                     helper.startPositions[ DynamicLevels.getCurrent() ] );
 
-        showGameGUI ();
+        showGameGUI();
     }
 
 
@@ -165,7 +167,6 @@ public class GameScreen extends Base2DScreen {
             if ( Gdx.input.isKeyJustPressed( Input.Keys.ENTER ) ) {
                 Vector3 thisPosition = playerSystem.getNotFilteredPos();
                 pushedPositions.add( thisPosition );
-
 
                 String pos = "new Vector3( " + thisPosition.x + "f, " +
                              thisPosition.y + "f, " + thisPosition.z + "f )";
@@ -261,7 +262,7 @@ public class GameScreen extends Base2DScreen {
             playerSystem.move( touchpad.getKnobPercentX(), -touchpad.getKnobPercentY() );
         } else {
             //if ( !DEBUG.GAME_MASTER_MODE.get() ) {
-                playerSystem.move( 0, 0 );
+            playerSystem.move( 0, 0 );
             //}
         }
 
@@ -330,6 +331,7 @@ public class GameScreen extends Base2DScreen {
 
         interactSystem = null;
     }
+
 
     private void showGameGUI () {
         guiType = GUI_TYPE.GAME_GUI;
