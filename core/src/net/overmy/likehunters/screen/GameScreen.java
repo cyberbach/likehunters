@@ -24,7 +24,9 @@ import net.overmy.likehunters.Core;
 import net.overmy.likehunters.DEBUG;
 import net.overmy.likehunters.MyCamera;
 import net.overmy.likehunters.MyGdxGame;
-import net.overmy.likehunters.MyPlayer;
+import net.overmy.likehunters.ashley.EntityBuilder;
+import net.overmy.likehunters.ashley.systems.MyPlayerSystem;
+import net.overmy.likehunters.logic.GameHelper;
 import net.overmy.likehunters.MyRender;
 import net.overmy.likehunters.ashley.systems.DecalSystem;
 import net.overmy.likehunters.ashley.systems.InteractSystem;
@@ -33,6 +35,7 @@ import net.overmy.likehunters.ashley.systems.TextDecalSystem;
 import net.overmy.likehunters.logic.DynamicLevels;
 import net.overmy.likehunters.resources.FontAsset;
 import net.overmy.likehunters.resources.IMG;
+import net.overmy.likehunters.resources.ModelAsset;
 import net.overmy.likehunters.utils.UIHelper;
 
 import java.util.ArrayList;
@@ -54,6 +57,7 @@ public class GameScreen extends Base2DScreen {
 
     private TextDecalSystem textDecalSystem = null;
     private InteractSystem  interactSystem  = null;
+    private MyPlayerSystem  playerSystem    = null;
 
     private static ArrayList< Vector3 > pushedPositions = new ArrayList< Vector3 >();
 
@@ -75,12 +79,14 @@ public class GameScreen extends Base2DScreen {
 
         textDecalSystem = AshleyWorld.getEngine().getSystem( TextDecalSystem.class );
         textDecalSystem.init();
+
+        playerSystem = AshleyWorld.getEngine().getSystem( MyPlayerSystem.class );
+
         //AshleyWorld.getEngine().getSystem( NPCSystem.class ).setWalkSound();
 
         interactSystem = AshleyWorld.getEngine().getSystem( InteractSystem.class );
 
         MyCamera.setCameraPosition( new Vector3( 0, 300, 0 ) );
-        MyPlayer.init();
 
         touchPadGroup = new Group();
         MyRender.getStage().addActor( UIHelper.initLoadIndicator() );
@@ -115,6 +121,10 @@ public class GameScreen extends Base2DScreen {
             MyPlayer.addToBag( Item.KEY6 );
             MyPlayer.addToBag( Item.GUN_WEAPON_UPGRADED );*/
         }
+
+        GameHelper helper = new GameHelper();
+        EntityBuilder.createPlayer( ModelAsset.TEST_NPC.get(),
+                                    helper.startPositions[ DynamicLevels.getCurrent() ] );
 
         showGameGUI ();
     }
@@ -152,31 +162,15 @@ public class GameScreen extends Base2DScreen {
         //MusicAsset.playRandom( delta );
 
         if ( DEBUG.GAME_MASTER_MODE.get() ) {
-            if ( Gdx.input.isKeyJustPressed( Input.Keys.NUM_9 ) ) {
-                MyPlayer.extraSpeed2 = 15.0f;
-            }
-
-            if ( Gdx.input.isKeyJustPressed( Input.Keys.NUM_0 ) ) {
-                MyPlayer.extraSpeed2 = 0.0f;
-            }
-
-            if ( Gdx.input.isKeyJustPressed( Input.Keys.INSERT ) ) {
-                MyPlayer.extraJump = 1.0f;
-            }
-
             if ( Gdx.input.isKeyJustPressed( Input.Keys.ENTER ) ) {
-                Matrix4 thisTransform = MyPlayer.getBody().getWorldTransform();
-                Vector3 thisPosition = new Vector3();
-                thisTransform.getTranslation( thisPosition );
+                Vector3 thisPosition = playerSystem.getNotFilteredPos();
                 pushedPositions.add( thisPosition );
 
-                Quaternion rotation = new Quaternion();
-                thisTransform.getRotation( rotation );
 
                 String pos = "new Vector3( " + thisPosition.x + "f, " +
                              thisPosition.y + "f, " + thisPosition.z + "f )";
                 Gdx.app.debug( "Pushed angle = " +
-                               rotation.getAngleAround( Vector3.Y ), "\n" + pos );
+                               playerSystem.getAngle(), "\n" + pos );
                 Gdx.app.debug( "THIS LOCATION", "" + DynamicLevels.getCurrent() );
             }
 
@@ -186,23 +180,23 @@ public class GameScreen extends Base2DScreen {
             }
 
             if ( Gdx.input.isKeyPressed( Input.Keys.W ) ) {
-                MyPlayer.move( 0, -1 );
+                playerSystem.move( 0, -1 );
             }
 
             if ( Gdx.input.isKeyPressed( Input.Keys.S ) ) {
-                MyPlayer.move( 0, 1 );
+                playerSystem.move( 0, 1 );
             }
 
             if ( Gdx.input.isKeyPressed( Input.Keys.A ) ) {
-                MyPlayer.move( -1, 0 );
+                playerSystem.move( -1, 0 );
             }
 
             if ( Gdx.input.isKeyPressed( Input.Keys.D ) ) {
-                MyPlayer.move( 1, 0 );
+                playerSystem.move( 1, 0 );
             }
 
             if ( Gdx.input.isKeyJustPressed( Input.Keys.SPACE ) ) {
-                MyPlayer.startJump();
+                playerSystem.startJump();
             }
 
             // GameMaster Mode
@@ -259,17 +253,16 @@ public class GameScreen extends Base2DScreen {
         }
 
         DynamicLevels.update( delta );
-        MyPlayer.updateControls( delta );
         MyCamera.update( delta );
 
-        textDecalSystem.setLastPlayerPosition( MyPlayer.getPosition() );
+        ///textDecalSystem.setLastPlayerPosition( MyPlayer.getPosition() );
 
         if ( guiType == GUI_TYPE.GAME_GUI ) {
-            MyPlayer.move( touchpad.getKnobPercentX(), -touchpad.getKnobPercentY() );
+            playerSystem.move( touchpad.getKnobPercentX(), -touchpad.getKnobPercentY() );
         } else {
-            if ( !DEBUG.GAME_MASTER_MODE.get() ) {
-                MyPlayer.move( 0, 0 );
-            }
+            //if ( !DEBUG.GAME_MASTER_MODE.get() ) {
+                playerSystem.move( 0, 0 );
+            //}
         }
 
         if ( DEBUG.FPS.get() ) {
@@ -381,10 +374,7 @@ public class GameScreen extends Base2DScreen {
                     if ( showGameOver ) {
                         return;
                     }
-                    if ( MyPlayer.canJump ) {
-                        MyPlayer.startJump();
-                        UIHelper.clickAnimation( jumpButton );
-                    }
+                    playerSystem.startJump();
                 }
             } );
         }
@@ -405,11 +395,7 @@ public class GameScreen extends Base2DScreen {
                     if ( showGameOver ) {
                         return;
                     }
-                    if ( MyPlayer.canAttack ) {
-                        MyPlayer.startAttack();
-                        //SoundAsset.HUU.play();
-                        UIHelper.clickAnimation( attackButton );
-                    }
+                    playerSystem.startAttack();
                 }
             } );
         }

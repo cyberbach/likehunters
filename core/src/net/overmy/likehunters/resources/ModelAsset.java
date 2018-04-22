@@ -97,6 +97,7 @@ public enum ModelAsset {
             if ( DEBUG.SHOW_MODEL_INFO.get() ) {
                 Gdx.app.debug( "" + this.name, "load" );
             }
+
             manager.load( name, Model.class );
         }
     }

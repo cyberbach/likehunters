@@ -10,7 +10,7 @@ import com.badlogic.gdx.Gdx;
 import net.overmy.likehunters.DEBUG;
 
 public enum TextAsset {
-    Title( "Квики\nв поисках Мики", "Quicky\nin search of Mickey" ),;
+    Title( "game", "game" ),;
 
     public static boolean russianLocale = true;
     private final String russianText;

@@ -5,8 +5,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Logger;
 
 import net.overmy.likehunters.logic.DynamicLevels;
@@ -51,7 +49,7 @@ public class MyGdxGame extends ApplicationAdapter {
         MyRender.init();// Здесь создание всех камер (2д и 3д) и всех батчей (2д, 3д и Декали)
         AshleyWorld.init();
 
-        MyPlayer.clearAll();
+        //MyPlayer.clearAll();
 
         // Создание и загрузка уровней
         DynamicLevels.init();
@@ -100,7 +98,6 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void dispose () {
         AshleyWorld.dispose();
-        MyPlayer.dispose();
         BulletWorld.dispose();
         Assets.unload();
         MyRender.dispose();

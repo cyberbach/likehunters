@@ -45,8 +45,8 @@ public final class MyRender {
     }
 
 
-    private static Sprite createSpriteRGB888 ( float width, float height ) {
-        Pixmap pixmap = new Pixmap( (int) width, (int) height, Pixmap.Format.RGB888 );
+    private static Sprite createBGSprite () {
+        Pixmap pixmap = new Pixmap( Core.WIDTH, Core.HEIGHT, Pixmap.Format.RGB888 );
         pixmap.setColor( GameColor.BG.get() );
         pixmap.fill();
 
@@ -71,7 +71,7 @@ public final class MyRender {
         final GroupStrategy groupStrategy = new CameraGroupStrategy( MyCamera.get() );
         decalBatch = new DecalBatch( groupStrategy );
 
-        blackFullScreen = createSpriteRGB888( Core.WIDTH, Core.HEIGHT );
+        blackFullScreen = createBGSprite(  );
         transition = new FloatAnimator( 0, 1, Core.FADE );
 
         stage = new Stage();

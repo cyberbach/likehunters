@@ -4,6 +4,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Array;
 
+import net.overmy.likehunters.logic.objects.GameObject;
+
 /**
  * Created by Andrey (cb) Mikheev
  * 17.03.2017
@@ -16,32 +18,19 @@ public class Level {
     final int[] connections;
 
     // Объекты на уровне, включая NPC и Enemy - это тоже объекты
-    ImmutableArray< LevelObjectBuilder > objects = null;
+    ImmutableArray< GameObject > objects = null;
 
 
     public Entity entity = null;
 
 
-    Level ( String connection, Array< LevelObjectBuilder > objects ) {
-        this.connections = toInts( connection );
-        this.objects = new ImmutableArray< LevelObjectBuilder >( objects );
+    Level ( int[] connection, Array< GameObject > objects ) {
+        this.connections = connection;
+        this.objects = new ImmutableArray< GameObject >( objects );
     }
 
 
-    Level ( String connection ) {
-        this.connections = toInts( connection );
-    }
-
-
-    private static int[] toInts ( String str ) {
-        if ( "".equals( str ) ) {
-            return null;
-        }
-        String[] separated = str.replaceAll( " ", "" ).split( "," );
-        final int[] result = new int[ separated.length ];
-        for ( int p = 0; p < separated.length; p++ ) {
-            result[ p ] = Integer.parseInt( separated[ p ] );
-        }
-        return result;
+    Level ( int[] connection ) {
+        this.connections = connection;
     }
 }

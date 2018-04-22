@@ -50,7 +50,6 @@ public class PhysicalSystem extends IteratingSystem {
 
     @Override
     protected void processEntity ( Entity entity, float delta ) {
-
         if ( !MyMapper.MODEL.has( entity ) ) {
             return;
         }

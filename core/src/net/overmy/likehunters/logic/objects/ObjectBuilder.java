@@ -1,4 +1,4 @@
-package net.overmy.likehunters.logic;
+package net.overmy.likehunters.logic.objects;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -10,6 +10,9 @@ import com.badlogic.gdx.math.Vector3;
 import net.overmy.likehunters.AshleyWorld;
 import net.overmy.likehunters.DEBUG;
 import net.overmy.likehunters.ashley.component.ModelComponent;
+import net.overmy.likehunters.logic.Dialog;
+import net.overmy.likehunters.logic.Item;
+import net.overmy.likehunters.logic.NPCAction;
 import net.overmy.likehunters.resources.GameColor;
 import net.overmy.likehunters.resources.ModelAsset;
 
@@ -18,7 +21,7 @@ import net.overmy.likehunters.resources.ModelAsset;
  * 17.03.2017
  */
 
-public class LevelObjectBuilder {
+public class ObjectBuilder {
 
     public    ModelAsset                  dynamicModelAsset = null;
     protected Vector3                     position          = null;
@@ -36,38 +39,38 @@ public class LevelObjectBuilder {
     private Vector2 doorAngles = null;
 
 
-    public LevelObjectBuilder setHeightOfLadder ( float heightOfLadder ) {
+    public ObjectBuilder setHeightOfLadder ( float heightOfLadder ) {
         this.heightOfLadder = heightOfLadder;
         return this;
     }
 
 
-    public LevelObjectBuilder setDynamicModelAsset ( ModelAsset dynamicModelAsset ) {
+    public ObjectBuilder setDynamicModelAsset ( ModelAsset dynamicModelAsset ) {
         this.dynamicModelAsset = dynamicModelAsset;
         return this;
     }
 
 
-    public LevelObjectBuilder setPosition ( Vector3 position ) {
+    public ObjectBuilder setPosition ( Vector3 position ) {
         this.position = position;
         return this;
     }
 
 
-    public LevelObjectBuilder setPositionR ( float x, float y, float z, float rot ) {
+    public ObjectBuilder setPositionR ( float x, float y, float z, float rot ) {
         this.position = new Vector3( x, y, z );
         setRotation( rot );
         return this;
     }
 
 
-    public LevelObjectBuilder setType ( OBJECT_TYPE type ) {
+    public ObjectBuilder setType ( OBJECT_TYPE type ) {
         this.type = type;
         return this;
     }
 
 
-    public LevelObjectBuilder setItem ( Item item ) {
+    public ObjectBuilder setItem ( Item item ) {
         this.item = item;/*
         if ( item.getModelAsset() != null ) {
             this.dynamicModelAsset = item.getModelAsset();
@@ -76,25 +79,25 @@ public class LevelObjectBuilder {
     }
 
 
-    public LevelObjectBuilder setMyDialog ( Dialog myDialog ) {
+    public ObjectBuilder setMyDialog ( Dialog myDialog ) {
         this.myDialog = myDialog;
         return this;
     }
 
 
-    public LevelObjectBuilder setScript ( ImmutableArray< NPCAction > actionsQueue ) {
+    public ObjectBuilder setScript ( ImmutableArray< NPCAction > actionsQueue ) {
         this.script = actionsQueue;
         return this;
     }
 
 
-    public LevelObjectBuilder setRotation ( float rotation ) {
+    public ObjectBuilder setRotation ( float rotation ) {
         this.rotation = rotation;
         return this;
     }
 
 
-    public LevelObjectBuilder setSize ( float size ) {
+    public ObjectBuilder setSize ( float size ) {
         this.size = size;
         return this;
     }
@@ -199,14 +202,14 @@ public class LevelObjectBuilder {
     }
 
 
-    public LevelObjectBuilder setDoorAngles ( float fromAngle, float toAngle ) {
+    public ObjectBuilder setDoorAngles ( float fromAngle, float toAngle ) {
         doorAngles = new Vector2();
         doorAngles.set( fromAngle, toAngle );
         return this;
     }
 
 
-    public LevelObjectBuilder setColorTint ( GameColor colorTint ) {
+    public ObjectBuilder setColorTint ( GameColor colorTint ) {
         this.tint = colorTint;
         return this;
     }

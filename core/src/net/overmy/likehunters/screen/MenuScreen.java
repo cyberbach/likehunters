@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.Align;
 import net.overmy.likehunters.AshleyWorld;
 import net.overmy.likehunters.Core;
 import net.overmy.likehunters.MyGdxGame;
-import net.overmy.likehunters.MyPlayer;
 import net.overmy.likehunters.MyRender;
 import net.overmy.likehunters.logic.DynamicLevels;
 import net.overmy.likehunters.resources.FontAsset;
@@ -85,7 +84,7 @@ public class MenuScreen extends Base2DScreen {
         introGroup.addActor( titleGroup );
 
         // FIXME нужен рефактор
-        final boolean canResume = MyPlayer.live && DynamicLevels.getCurrent() != 0;
+        final boolean canResume = /*MyPlayer.live && */DynamicLevels.getCurrent() != 0;
 
         final float labelPosX = Core.WIDTH * 0.75f;
         final float label2PosY = Core.HEIGHT * 0.23f;
@@ -125,7 +124,7 @@ public class MenuScreen extends Base2DScreen {
                 AshleyWorld.dispose();
                 AshleyWorld.init();
 
-                MyPlayer.clearAll();
+                //MyPlayer.clearAll();
 
                 UIHelper.rollOut( titleGroup, Core.WIDTH_HALF, Core.HEIGHT * 0.8f, Core.WIDTH_HALF,
                                   Core.HEIGHT * 1.5f );

@@ -196,7 +196,7 @@ public class WorldContactListener extends ContactListener {
         boolean contact2Ladder = type2.equals( TYPE_OF_ENTITY.LADDER );
 
         if ( contact1Player && contact2Ladder ) {
-            MyPlayer.onLadder = true;
+            //MyPlayer.onLadder = true;
             return;
         }
 
@@ -399,7 +399,7 @@ public class WorldContactListener extends ContactListener {
 
         boolean contact2Ladder = type2.equals( TYPE_OF_ENTITY.LADDER );
         if ( contact1Player && contact2Ladder ) {
-            MyPlayer.onLadder = false;
+            //MyPlayer.onLadder = false;
         }
     }
 

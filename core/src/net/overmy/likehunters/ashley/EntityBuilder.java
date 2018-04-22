@@ -9,7 +9,6 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
 
 import net.overmy.likehunters.BulletWorld;
@@ -73,15 +72,15 @@ public final class EntityBuilder {
         return entity;
     }
 
-    public static Entity createPlayer ( ModelInstance modelInstance ) {
 
+    public static void createPlayer ( ModelInstance modelInstance, Vector3 position ) {
         PhysicalBuilder physicalBuilder = new PhysicalBuilder()
                 .setModelInstance( modelInstance )
                 .defaultMotionState()
                 .setMass( 20.0f )
-                .setPosition( new Vector3( 0, 3, 0 ) )
+                .setPosition( position )
                 .capsuleShape()
-                .setCollisionFlag( btCollisionObject.CollisionFlags.CF_CHARACTER_OBJECT )
+                .setCollisionFlag( CollisionFlags.CF_CHARACTER_OBJECT )
                 .setCallbackFlag( BulletWorld.PLAYER_FLAG )
                 .setCallbackFilter( BulletWorld.PLAYER_FILTER )
                 .disableDeactivation()
@@ -90,15 +89,12 @@ public final class EntityBuilder {
         Entity entity = new Entity();
         entity.add( physicalBuilder.buildPhysicalComponent() );
         entity.add( new ModelComponent( modelInstance ) );
-        //entity.add( new AnimationComponent( modelInstance ) );
+        entity.add( new AnimationComponent( modelInstance ) );
         entity.add( new GroundedComponent() );
         entity.add( new LifeComponent( 100.0f, 1, 2 ) );
         entity.add( new TypeOfEntityComponent( TYPE_OF_ENTITY.MYPLAYER ) );
         entity.add( new MyPlayerComponent() );
 
         engine.addEntity( entity );
-        return entity;
     }
-
-    // GUI entities
 }

@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import net.overmy.likehunters.Core;
 import net.overmy.likehunters.MyGdxGame;
 import net.overmy.likehunters.MyGdxGame.SCREEN_TYPE;
-import net.overmy.likehunters.MyPlayer;
 import net.overmy.likehunters.MyRender;
 import net.overmy.likehunters.logic.DynamicLevels;
 import net.overmy.likehunters.resources.Assets;

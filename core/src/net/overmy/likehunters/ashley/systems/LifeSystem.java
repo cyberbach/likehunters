@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 import net.overmy.likehunters.MyCamera;
-import net.overmy.likehunters.MyPlayer;
 import net.overmy.likehunters.MyRender;
 import net.overmy.likehunters.ashley.MyMapper;
 import net.overmy.likehunters.ashley.component.LifeComponent;
@@ -29,7 +28,8 @@ public class LifeSystem extends IteratingSystem {
     private final DecalBatch        decalBatch;
     private final PerspectiveCamera camera;
 
-    private final Vector3 position   = new Vector3();
+    private final Vector3 position           = new Vector3();
+    private       Vector3 offsetToMyPosition = new Vector3();
     private       Vector3 myPosition = new Vector3();
 
     private int     counter  = 0;
@@ -55,16 +55,21 @@ public class LifeSystem extends IteratingSystem {
 
     @Override
     protected void processEntity ( Entity entity, float delta ) {
-        boolean myEntity = entity.equals( MyPlayer.getEntity() );
+        boolean myEntity = MyMapper.MY_PLAYER.has( entity );//entity.equals( MyPlayer.getEntity() );
+        if(myEntity){
+            MyMapper.MODEL.get( entity ).modelInstance.transform.getTranslation( myPosition );
+        }
+
         if ( myEntity && !showMyHP ) {
             return;
         }
 
-        MyMapper.MODEL.get( entity ).modelInstance.transform.getTranslation( position );
-        myPosition.set( MyPlayer.getNotFilteredPos() );
-        myPosition.sub( position );
 
-        boolean showHP = myPosition.len() < 12.0f;
+        MyMapper.MODEL.get( entity ).modelInstance.transform.getTranslation( position );
+        offsetToMyPosition.set( myPosition );
+        offsetToMyPosition.sub( position );
+
+        boolean showHP = offsetToMyPosition.len() < 12.0f;
 
         LifeComponent lifeComponent = MyMapper.LIFE.get( entity );
 
@@ -124,7 +129,7 @@ public class LifeSystem extends IteratingSystem {
             } else {
                 entity.add( new RemoveByTimeComponent( 0 ) );
                 if ( TYPE_OF_ENTITY.MYPLAYER.equals( typeOfEntity ) ) {
-                    MyPlayer.live = false;
+                    //MyPlayer.live = false;
                 }
             }
         }

@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 
 import net.overmy.likehunters.DEBUG;
-import net.overmy.likehunters.MyPlayer;
 import net.overmy.likehunters.ashley.MyMapper;
 import net.overmy.likehunters.ashley.component.AnimationComponent;
 import net.overmy.likehunters.ashley.component.NPCComponent;
@@ -127,8 +126,8 @@ public class NPCSystem extends IteratingSystem {
                     attack = true;
 
                     npcPosition.set( notFilteredPos.x, notFilteredPos.z );
-                    tmp.set( MyPlayer.getPosition() ).sub( npcPosition );
-                    if ( tmp.len() > 8.0f || !MyPlayer.live ) {
+                    /*tmp.set( MyPlayer.getPosition() ).sub( npcPosition );*/
+                    /*if ( tmp.len() > 8.0f || !MyPlayer.live ) {
                         npcComponent.time = 0;
                         npcComponent.hunting = false;
                     } else {
@@ -136,7 +135,7 @@ public class NPCSystem extends IteratingSystem {
                         direction.set( tmp );
                         npcComponent.hunting = true;
                         soundByDistance( entity );
-                    }
+                    }*/
 
                     break;
 
@@ -150,7 +149,7 @@ public class NPCSystem extends IteratingSystem {
         }
 
         AnimationComponent animationComponent = MyMapper.ANIMATION.get( entity );
-        String ID_CURRENT = animationComponent.getID();
+        String ID_CURRENT = "";//animationComponent.getID();
         String ID_RUN = "RUN";
         String ID_IDLE = "IDLE";
         String ID_ATTACK = "ATTACK";
@@ -272,7 +271,7 @@ public class NPCSystem extends IteratingSystem {
     private void soundByDistance ( Entity entity ) {
         float MAX_LISTEN_DISTANCE = 20.0f;
         // Set NPC step-sounds by distance of player
-        Vector2 playerPosition = MyPlayer.getPosition();
+        Vector2 playerPosition = new Vector2(  );//MyPlayer.getPosition();
         float distance = MAX_LISTEN_DISTANCE - npcPosition.sub( playerPosition ).len();
 
         boolean isFlyingNPC = false;

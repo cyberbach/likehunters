@@ -7,6 +7,10 @@ package net.overmy.likehunters;
 
 public final class Core {
 
+    private Core () {
+    }
+
+
     public static final float FADE      = 0.3f;
     public static final float FADE_HALF = FADE * 0.5f;
 
@@ -17,10 +21,6 @@ public final class Core {
 
     public static float SensitivitySpeedByX = 0.0f;
     public static float SensitivitySpeedByY = 0.0f;
-
-
-    private Core () {
-    }
 
 
     static void resize ( int width, int height ) {

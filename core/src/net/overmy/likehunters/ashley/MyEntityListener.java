@@ -3,16 +3,21 @@ package net.overmy.likehunters.ashley;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g3d.model.Animation;
+import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.collision.btIndexedMesh;
 import com.badlogic.gdx.physics.bullet.collision.btTriangleIndexVertexArray;
 import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 
 import net.overmy.likehunters.BulletWorld;
 import net.overmy.likehunters.DEBUG;
 import net.overmy.likehunters.MyRender;
+import net.overmy.likehunters.ashley.component.AnimationComponent;
 import net.overmy.likehunters.ashley.component.PhysicalBVHComponent;
 import net.overmy.likehunters.ashley.component.PhysicalComponent;
 
@@ -35,6 +40,18 @@ public class MyEntityListener implements EntityListener {
     public void entityAdded ( Entity entity ) {
         if ( MyMapper.GROUP_IN_STAGE.has( entity ) ) {
             MyRender.getStage().addActor( MyMapper.GROUP_IN_STAGE.get( entity ).group );
+        }
+
+        if ( MyMapper.ANIMATION.has( entity ) ) {
+            AnimationComponent animationComponent = MyMapper.ANIMATION.get( entity );
+            Array< String > stringArray = new Array< String >();
+            for ( int i = 0; i < animationComponent.animations.size(); i++ ) {
+                stringArray.add( animationComponent.animations.get( i ).id );
+            }
+            animationComponent.names = new ImmutableArray< String >( stringArray );
+            String id = stringArray.get( 0 );
+            animationComponent.controller.animate( id, 1, 1.0f, null, 0f );
+            animationComponent.controller.queue( id, 1, 1.0f, null, 0f );
         }
 
 
@@ -81,6 +98,13 @@ public class MyEntityListener implements EntityListener {
     @Override
     public void entityRemoved ( Entity entity ) {
 
+
+        if ( MyMapper.ANIMATION.has( entity ) ) {
+            AnimationComponent animationComponent = MyMapper.ANIMATION.get( entity );
+            animationComponent.controller = null;
+            animationComponent.animations = null;
+            animationComponent.names = null;
+        }
 
         if ( MyMapper.LEVEL_OBJECT.has( entity ) && MyMapper.NPC.has( entity ) ) {
             if ( MyMapper.NPC.get( entity ).die ) {

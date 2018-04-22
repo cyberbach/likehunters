@@ -18,6 +18,7 @@ import net.overmy.likehunters.ashley.component.LevelIDComponent;
 import net.overmy.likehunters.ashley.component.LevelObjectComponent;
 import net.overmy.likehunters.ashley.component.LifeComponent;
 import net.overmy.likehunters.ashley.component.ModelComponent;
+import net.overmy.likehunters.ashley.component.MyPlayerComponent;
 import net.overmy.likehunters.ashley.component.NPCComponent;
 import net.overmy.likehunters.ashley.component.OutOfCameraComponent;
 import net.overmy.likehunters.ashley.component.PhysicalBVHComponent;
@@ -53,6 +54,7 @@ public final class MyMapper {
     public static ComponentMapper< Stage2DGroupComponent > GROUP_IN_STAGE = null;
     public static ComponentMapper< SkipScriptComponent >   SKIP           = null;
     public static ComponentMapper< DoorComponent >         DOOR           = null;
+    public static ComponentMapper< MyPlayerComponent >     MY_PLAYER           = null;
 
 
     private MyMapper () {
@@ -82,6 +84,7 @@ public final class MyMapper {
         GROUP_IN_STAGE = ComponentMapper.getFor( Stage2DGroupComponent.class );
         SKIP = ComponentMapper.getFor( SkipScriptComponent.class );
         DOOR = ComponentMapper.getFor( DoorComponent.class );
+        MY_PLAYER = ComponentMapper.getFor( MyPlayerComponent.class );
     }
 
 
@@ -108,5 +111,6 @@ public final class MyMapper {
         GROUP_IN_STAGE = null;
         SKIP = null;
         DOOR = null;
+        MY_PLAYER = null;
     }
 }
