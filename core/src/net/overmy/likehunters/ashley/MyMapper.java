@@ -23,6 +23,7 @@ import net.overmy.likehunters.ashley.component.NPCComponent;
 import net.overmy.likehunters.ashley.component.OutOfCameraComponent;
 import net.overmy.likehunters.ashley.component.PhysicalBVHComponent;
 import net.overmy.likehunters.ashley.component.PhysicalComponent;
+import net.overmy.likehunters.ashley.component.PhysicalConnectComponent;
 import net.overmy.likehunters.ashley.component.PositionComponent;
 import net.overmy.likehunters.ashley.component.RemoveByTimeComponent;
 import net.overmy.likehunters.ashley.component.SkipScriptComponent;
@@ -32,16 +33,17 @@ import net.overmy.likehunters.ashley.component.TypeOfEntityComponent;
 import net.overmy.likehunters.ashley.component.WeaponComponent;
 
 public final class MyMapper {
-    public static ComponentMapper< PositionComponent >       POSITION        = null;
-    public static ComponentMapper< AnimationComponent >      ANIMATION       = null;
-    public static ComponentMapper< PhysicalComponent >       PHYSICAL        = null;
-    static        ComponentMapper< PhysicalBVHComponent >    BVH_PHYSICAL    = null;
-    public static ComponentMapper< ModelComponent >          MODEL           = null;
-    public static ComponentMapper< GroundedComponent >       GROUNDED        = null;
-    public static ComponentMapper< OutOfCameraComponent >  OUT_OF_CAMERA  = null;
-    public static ComponentMapper< BoundingBoxComponent >  BOUNDS         = null;
-    public static ComponentMapper< TypeOfEntityComponent > TYPE           = null;
-    public static ComponentMapper< LevelIDComponent >      REMOVE_BY_ZONE = null;
+    public static ComponentMapper< PositionComponent >        POSITION         = null;
+    public static ComponentMapper< AnimationComponent >       ANIMATION        = null;
+    public static ComponentMapper< PhysicalComponent >        PHYSICAL         = null;
+    static        ComponentMapper< PhysicalBVHComponent >     BVH_PHYSICAL     = null;
+    public static ComponentMapper< PhysicalConnectComponent > CONNECT_PHYSICAL = null;
+    public static ComponentMapper< ModelComponent >           MODEL            = null;
+    public static ComponentMapper< GroundedComponent >        GROUNDED         = null;
+    public static ComponentMapper< OutOfCameraComponent >     OUT_OF_CAMERA    = null;
+    public static ComponentMapper< BoundingBoxComponent >     BOUNDS           = null;
+    public static ComponentMapper< TypeOfEntityComponent >    TYPE             = null;
+    public static ComponentMapper< LevelIDComponent >         REMOVE_BY_ZONE = null;
     public static ComponentMapper< RemoveByTimeComponent > REMOVE_BY_TIME = null;
     public static ComponentMapper< DecalComponent >        DECAL          = null;
     public static ComponentMapper< InteractComponent >     INTERACT       = null;
@@ -64,6 +66,7 @@ public final class MyMapper {
     public static void init () {
         PHYSICAL = ComponentMapper.getFor( PhysicalComponent.class );
         BVH_PHYSICAL = ComponentMapper.getFor( PhysicalBVHComponent.class );
+        CONNECT_PHYSICAL = ComponentMapper.getFor( PhysicalConnectComponent.class );
         POSITION = ComponentMapper.getFor( PositionComponent.class );
         ANIMATION = ComponentMapper.getFor( AnimationComponent.class );
         MODEL = ComponentMapper.getFor( ModelComponent.class );
@@ -91,6 +94,7 @@ public final class MyMapper {
     public static void dispose () {
         PHYSICAL  = null;
         BVH_PHYSICAL  = null;
+        CONNECT_PHYSICAL  = null;
         POSITION  = null;
         ANIMATION  = null;
         MODEL = null;

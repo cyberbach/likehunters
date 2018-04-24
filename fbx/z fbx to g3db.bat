@@ -1,14 +1,19 @@
 @echo off
+
 set FBX_CONVERTER="D:\Projects\fbx-conv-win32.exe"
 set FBX_FOLDER="D:\Projects\likehunters\fbx"
-cd %FBX_FOLDER%
-
-for /f "delims=" %%i in ('dir /b /a-d *.fbx') do %FBX_CONVERTER% -p  -f -o g3db "%%~i"
-
 set G3DB_FILES="*.g3db"
 set G3DB_LEVEL_FILES="level_*.g3db"
 set ASSETS_DIR="D:\Projects\likehunters\android\assets\models"
 set WORLD_DIR="D:\Projects\likehunters\android\assets\models\world"
+
+cd %WORLD_DIR%
+del %G3DB_FILES%
+
+cd %FBX_FOLDER%
+
+for /f "delims=" %%i in ('dir /b /a-d *.fbx') do %FBX_CONVERTER% -p  -f -o g3db "%%~i"
+
 
 
 xcopy %G3DB_LEVEL_FILES% %WORLD_DIR% /y

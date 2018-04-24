@@ -62,11 +62,11 @@ public class MyPlayerSystem extends IteratingSystem {
 
         if ( jump ) {
             jump = false;
-            playerBody.applyCentralImpulse( new Vector3( 0, 200, 0 ) );
+            playerBody.applyCentralImpulse( new Vector3( 0, 800, 0 ) );
             MyMapper.ANIMATION.get( entity ).play( 2, 1.0f );
         }
 
-        MyCamera.setCameraPosition( notFilteredPos );
+        //MyCamera.setCameraPosition( notFilteredPos );
 
         MyMapper.ANIMATION.get( entity ).queue( 0,1.0f );
     }

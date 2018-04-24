@@ -6,6 +6,7 @@ package net.overmy.likehunters.ashley.component;
  */
 
 public enum TYPE_OF_ENTITY {
+    CAMERA,
     DOOR,
     COLLECTABLE,
     PICKABLE,

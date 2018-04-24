@@ -19,15 +19,17 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
+import com.badlogic.gdx.physics.bullet.dynamics.btTypedConstraint;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
 import com.badlogic.gdx.utils.Array;
 
 public final class BulletWorld {
 
-    public final static int GROUND_FLAG      = 1 << 9;
-    public final static int PLAYER_FLAG      = 1 << 10;
-    public final static int MYWEAPON_FLAG      = 1 << 11;
-    public final static int ENEMY_WEAPON_FLAG      = 1 << 12;
+    public final static int GROUND_FLAG       = 1 << 9;
+    public final static int PLAYER_FLAG       = 1 << 10;
+    public final static int MYWEAPON_FLAG     = 1 << 11;
+    public final static int ENEMY_WEAPON_FLAG = 1 << 12;
+    public final static int CAMERA_FLAG       = 1 << 13;
 
     //public final static int FILTER_NPC = PLAYER_FLAG | MYWEAPON_FLAG;
     public final static int PLAYER_FILTER = GROUND_FLAG | ENEMY_WEAPON_FLAG;
@@ -153,5 +155,10 @@ public final class BulletWorld {
 
         constraintSolver.dispose();
         constraintSolver = null;
+    }
+
+
+    public static void addConstraint ( btTypedConstraint constraint ) {
+        dynamicsWorld.addConstraint( constraint, false );
     }
 }

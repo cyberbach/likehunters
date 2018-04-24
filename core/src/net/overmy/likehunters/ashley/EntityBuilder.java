@@ -8,8 +8,10 @@ package net.overmy.likehunters.ashley;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
+import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 
 import net.overmy.likehunters.BulletWorld;
 import net.overmy.likehunters.PhysicalBuilder;
@@ -20,6 +22,8 @@ import net.overmy.likehunters.ashley.component.LevelIDComponent;
 import net.overmy.likehunters.ashley.component.LifeComponent;
 import net.overmy.likehunters.ashley.component.ModelComponent;
 import net.overmy.likehunters.ashley.component.MyPlayerComponent;
+import net.overmy.likehunters.ashley.component.PhysicalComponent;
+import net.overmy.likehunters.ashley.component.PhysicalConnectComponent;
 import net.overmy.likehunters.ashley.component.TYPE_OF_ENTITY;
 import net.overmy.likehunters.ashley.component.TypeOfEntityComponent;
 import net.overmy.likehunters.resources.ModelAsset;
@@ -73,7 +77,7 @@ public final class EntityBuilder {
     }
 
 
-    public static void createPlayer ( ModelInstance modelInstance, Vector3 position ) {
+    public static btRigidBody createPlayer ( ModelInstance modelInstance, Vector3 position ) {
         PhysicalBuilder physicalBuilder = new PhysicalBuilder()
                 .setModelInstance( modelInstance )
                 .defaultMotionState()
@@ -86,8 +90,12 @@ public final class EntityBuilder {
                 .disableDeactivation()
                 .disableRotation();
 
+        PhysicalComponent physicalComponent = physicalBuilder.buildPhysicalComponent();
+
+        btRigidBody body = physicalBuilder.getSavedBody();
+
         Entity entity = new Entity();
-        entity.add( physicalBuilder.buildPhysicalComponent() );
+        entity.add( physicalComponent );
         entity.add( new ModelComponent( modelInstance ) );
         entity.add( new AnimationComponent( modelInstance ) );
         entity.add( new GroundedComponent() );
@@ -96,5 +104,31 @@ public final class EntityBuilder {
         entity.add( new MyPlayerComponent() );
 
         engine.addEntity( entity );
+
+        return body;
+    }
+
+    public static btRigidBody createGhostCamera (btRigidBody connectBody ) {
+        PhysicalBuilder physicalBuilder = new PhysicalBuilder()
+                .defaultMotionState()
+                .setMass(20.0f)
+                .capsuleShape(0.2f,0)
+                .setCollisionFlag( CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK )
+                .setCallbackFlag( BulletWorld.CAMERA_FLAG )
+                .setCallbackFilter( 0 )
+                .disableRotation();
+
+        PhysicalComponent physicalComponent = physicalBuilder.buildPhysicalComponent();
+
+        btRigidBody body = physicalBuilder.getSavedBody();
+
+        Entity entity = new Entity();
+        entity.add( physicalComponent );
+        entity.add( new TypeOfEntityComponent( TYPE_OF_ENTITY.CAMERA ) );
+        entity.add( new PhysicalConnectComponent( connectBody ) );
+
+        engine.addEntity( entity );
+
+        return body;
     }
 }

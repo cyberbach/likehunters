@@ -10,6 +10,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -88,8 +89,6 @@ public class GameScreen extends Base2DScreen {
 
         interactSystem = AshleyWorld.getEngine().getSystem( InteractSystem.class );
 
-        MyCamera.setCameraPosition( new Vector3( 0, 300, 0 ) );
-
         touchPadGroup = new Group();
         MyRender.getStage().addActor( UIHelper.initLoadIndicator() );
         MyRender.getStage().addActor( gameGroup = new Group() );
@@ -124,9 +123,16 @@ public class GameScreen extends Base2DScreen {
             MyPlayer.addToBag( Item.GUN_WEAPON_UPGRADED );*/
         }
 
+        btRigidBody body = null;
+
         GameHelper helper = new GameHelper();
-        EntityBuilder.createPlayer( ModelAsset.TEST_NPC.get(),
+        body = EntityBuilder.createPlayer( ModelAsset.TEST_NPC.get(),
                                     helper.startPositions[ DynamicLevels.getCurrent() ] );
+
+        btRigidBody ghostCameraBody = EntityBuilder.createGhostCamera(body);
+
+        MyCamera.initBody();
+        MyCamera.setConnectionBody( ghostCameraBody );
 
         showGameGUI();
     }
@@ -330,6 +336,8 @@ public class GameScreen extends Base2DScreen {
         gameGroup = null;
 
         interactSystem = null;
+
+        MyCamera.removeConnectionBody();
     }
 
 

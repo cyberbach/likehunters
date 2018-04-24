@@ -1,5 +1,6 @@
 package net.overmy.likehunters;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.model.Node;
@@ -124,6 +125,9 @@ public class PhysicalBuilder {
 
         bodyShape = new btCapsuleShape( radius, height );
         bodyShape.calculateLocalInertia( mass, inertia );
+
+        Gdx.app.debug( "inertia",""+inertia );
+
         return this;
     }
 

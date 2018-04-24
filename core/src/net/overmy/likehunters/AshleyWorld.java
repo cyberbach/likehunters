@@ -17,6 +17,7 @@ import net.overmy.likehunters.ashley.systems.DoorSystem;
 import net.overmy.likehunters.ashley.systems.InteractSystem;
 import net.overmy.likehunters.ashley.systems.LifeSystem;
 import net.overmy.likehunters.ashley.systems.MyPlayerSystem;
+import net.overmy.likehunters.ashley.systems.PhysicalConnectSystem;
 import net.overmy.likehunters.ashley.systems.PhysicalSystem;
 import net.overmy.likehunters.ashley.systems.RenderSystem;
 import net.overmy.likehunters.ashley.systems.RotationPhysicSystem;
@@ -51,6 +52,7 @@ public final class AshleyWorld {
         engine.addSystem( new WeaponSystem() );
         engine.addSystem( new AnimationSystem() );
         engine.addSystem( new RotationPhysicSystem() );
+        engine.addSystem( new PhysicalConnectSystem() );
         engine.addSystem( new PhysicalSystem() );
         engine.addSystem( new RenderSystem() );
         engine.addSystem( new TextDecalSystem() );
@@ -71,6 +73,7 @@ public final class AshleyWorld {
         engine.removeSystem( engine.getSystem( RotationPhysicSystem.class ) );
         engine.removeSystem( engine.getSystem( PhysicalSystem.class ) );
         engine.removeSystem( engine.getSystem( RenderSystem.class ) );
+        engine.removeSystem( engine.getSystem( PhysicalConnectSystem.class ) );
         engine.removeSystem( engine.getSystem( DecalSystem.class ) );
         engine.removeSystem( engine.getSystem( InteractSystem.class ) );
         engine.removeSystem( engine.getSystem( WeaponSystem.class ) );

@@ -1,13 +1,19 @@
 package net.overmy.likehunters;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.physics.bullet.dynamics.btFixedConstraint;
+import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 
+import net.overmy.likehunters.logic.GameHelper;
 import net.overmy.likehunters.utils.Vector3Animator;
 
 /*
@@ -17,18 +23,24 @@ import net.overmy.likehunters.utils.Vector3Animator;
 
 public class MyCamera {
 
-    private static Vector3           cameraOffset        = new Vector3( 0, 1.4f, 4 );
-    private static Vector3           cameraDirection     = new Vector3( 0, 0, -1 );
-    private static Vector3           cameraPosition      = new Vector3( 0, 0.0f, 0 );
-    private static Vector3           frustumOffset       = new Vector3( 0, 0, 2 );
-    private static Vector3           camPosition         = new Vector3();
+    private static Vector3 cameraDirection = new Vector3( 0, 0, -1 );
+
+    private static Vector3           cameraPosition      = new Vector3();
     private static Vector3Animator   camMotion           = new Vector3Animator();
     private static Vector3           filteredPosition    = new Vector3();
     private static DirectionalLight  light               = null;
     private static float             cameraAngle         = 0.0f;
     private static PerspectiveCamera camera              = null;
-    private static PerspectiveCamera cullingCamera       = null;
     private static float             filteredCameraAngle = 0.0f;
+
+
+    private static btRigidBody cameraPhysicalBody      = null;
+    private static btRigidBody cameraPhysicalGhostBody = null;
+
+    private static btFixedConstraint constraint = null;
+
+    private static Quaternion lastRotation = new Quaternion();
+    private static Vector3    lastPosition = new Vector3();
 
 
     private MyCamera () {
@@ -38,7 +50,6 @@ public class MyCamera {
     public static void init () {
         float cullingDistance = 400.0f;// Задняя плоскость отсечения (дальность тумана)
         float defaultFOV = 58.0f; // Угол обзора (67 - стандартный)
-        float cullingFOV = 70.0f;
 
         Vector3 upVector = new Vector3( 0, 10000, 0 );
 
@@ -47,14 +58,39 @@ public class MyCamera {
         camera.far = cullingDistance;
         camera.up.set( upVector );
 
-        cullingCamera = new PerspectiveCamera( cullingFOV, Core.WIDTH, Core.HEIGHT );
-        cullingCamera.near = 0.1f;
-        cullingCamera.far = cullingDistance * 1.2f;
-        cullingCamera.up.set( upVector );
-
         Color lightColor = new Color( 0.6f, 0.6f, 0.6f, 1.0f );
         light = new DirectionalLight();
         light.set( lightColor, 0, 0, 0 );
+    }
+
+
+    public static void initBody () {
+        GameHelper helper = new GameHelper();
+        cameraPhysicalBody = helper.createCameraBody();
+    }
+
+
+    public static void setConnectionBody ( btRigidBody body ) {
+        if ( constraint != null ) {
+            return;
+        }
+
+        cameraPhysicalGhostBody = body;
+
+        constraint = new btFixedConstraint(
+                body, cameraPhysicalBody,
+                cameraPhysicalBody.getWorldTransform(),
+                new Matrix4()
+        );
+        BulletWorld.addConstraint( constraint );
+    }
+
+
+    public static void removeConnectionBody () {
+        if ( constraint != null ) {
+            constraint.dispose();
+        }
+        constraint = null;
     }
 
 
@@ -69,8 +105,8 @@ public class MyCamera {
 
 
     public static boolean isVisible ( Matrix4 matrix4 ) {
-        matrix4.getTranslation( camPosition );
-        return cullingCamera.frustum.pointInFrustum( camPosition );
+        matrix4.getTranslation( cameraPosition );
+        return camera.frustum.sphereInFrustum( cameraPosition, 1.5f );
     }
 
 
@@ -89,26 +125,41 @@ public class MyCamera {
     public static void update ( float delta ) {
         updateMotion( delta );
 
-        float ALPHA = 0.2f;//16
-        filteredCameraAngle = filteredCameraAngle + ALPHA * ( cameraAngle - filteredCameraAngle );
+        if ( Gdx.input.isKeyJustPressed( Input.Keys.LEFT ) ) {
+            Matrix4 ghostTransform = cameraPhysicalGhostBody.getWorldTransform();
+            ghostTransform.rotate( Vector3.Y, 15 );
+            cameraPhysicalGhostBody.setWorldTransform( ghostTransform );
+        }
 
-        camera.position.set( cameraOffset );
-        camera.position.add( camMotion.getCurrent() );
-        camera.position.rotate( Vector3.Y, filteredCameraAngle );
-        camera.position.add( cameraPosition );
+        if ( Gdx.input.isKeyJustPressed( Input.Keys.RIGHT ) ) {
+            Matrix4 ghostTransform = cameraPhysicalGhostBody.getWorldTransform();
+            ghostTransform.rotate( Vector3.Y, -15 );
+            cameraPhysicalGhostBody.setWorldTransform( ghostTransform );
+        }
+
+        Vector3 positionOfPhysicalBody = new Vector3();
+        cameraPhysicalBody.getWorldTransform().getTranslation( positionOfPhysicalBody );
+
+        filteredCameraAngle = LowPassFilter( filteredCameraAngle, cameraAngle );
+        filteredPosition.x = LowPassFilter( filteredPosition.x, positionOfPhysicalBody.x );
+        filteredPosition.y = LowPassFilter( filteredPosition.y, positionOfPhysicalBody.y );
+        filteredPosition.z = LowPassFilter( filteredPosition.z, positionOfPhysicalBody.z );
+
+        camera.position.set( filteredPosition );
         camera.direction.set( cameraDirection );
         camera.direction.rotate( Vector3.Y, filteredCameraAngle );
         camera.update();
 
-        cullingCamera.position.set( cameraOffset );
-        cullingCamera.position.add( frustumOffset );
-        cullingCamera.position.rotate( Vector3.Y, filteredCameraAngle );
-        cullingCamera.position.add( cameraPosition );
-        cullingCamera.direction.set( camera.direction );
-        cullingCamera.update();
-
         light.direction.set( 0, -1, -2 );
         light.direction.rotate( Vector3.Y, filteredCameraAngle );
+    }
+
+
+    private static final float ALPHA = 0.2f;
+
+
+    private static float LowPassFilter ( float a, float b ) {
+        return a + ALPHA * ( b - a );
     }
 
 
@@ -119,6 +170,16 @@ public class MyCamera {
 
     public static void addCameraAngle ( float nextCameraAngle ) {
         cameraAngle += nextCameraAngle;
+
+        Matrix4 ghostTransform = cameraPhysicalGhostBody.getWorldTransform();
+        // get
+        ghostTransform.getRotation( lastRotation );
+        ghostTransform.getTranslation( lastPosition );
+        // set
+        ghostTransform.setToRotation( Vector3.Y, cameraAngle );
+        ghostTransform.translate( lastPosition );
+        // save transform
+        cameraPhysicalGhostBody.setWorldTransform( ghostTransform );
     }
 
 
@@ -131,28 +192,17 @@ public class MyCamera {
     }
 
 
-    public static void setCameraPosition ( Vector3 v3 ) {
-        float ALPHA = 0.25f;
-        filteredPosition.x = filteredPosition.x + ALPHA * ( v3.x - filteredPosition.x );
-        filteredPosition.y = filteredPosition.y + ALPHA * ( v3.y - filteredPosition.y );
-        filteredPosition.z = filteredPosition.z + ALPHA * ( v3.z - filteredPosition.z );
-
-        cameraPosition.set( filteredPosition );
-    }
-
-
     public static boolean isVisible ( BoundingBox boundingBox ) {
-        return cullingCamera.frustum.boundsInFrustum( boundingBox );
+        return camera.frustum.boundsInFrustum( boundingBox );
     }
 
 
     public static boolean isVisible ( Vector3 testPosition ) {
-        return cullingCamera.frustum.pointInFrustum( testPosition );
+        return camera.frustum.pointInFrustum( testPosition );
     }
 
 
     public void dispose () {
         camera = null;
-        cullingCamera = null;
     }
 }
