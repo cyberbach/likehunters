@@ -56,10 +56,10 @@ public class MyPlayerSystem extends IteratingSystem {
             bodyTransform.rotate( Vector3.Y, modelAngle );
             playerBody.proceedToTransform( bodyTransform );
 
-            MyMapper.ANIMATION.get( entity ).play( 1, 1.0f );
+            //MyMapper.ANIMATION.get( entity ).play( 1, 1.0f );
         }
         playerBody.setLinearVelocity( velocity );
-
+/*
         if ( jump ) {
             jump = false;
             playerBody.applyCentralImpulse( new Vector3( 0, 800, 0 ) );
@@ -68,7 +68,7 @@ public class MyPlayerSystem extends IteratingSystem {
 
         //MyCamera.setCameraPosition( notFilteredPos );
 
-        MyMapper.ANIMATION.get( entity ).queue( 0,1.0f );
+        MyMapper.ANIMATION.get( entity ).queue( 0,1.0f );*/
     }
 
 

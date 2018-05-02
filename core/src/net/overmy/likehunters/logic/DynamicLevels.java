@@ -38,9 +38,9 @@ public final class DynamicLevels {
         // на выходе из этого метода GameHelper удалится из памяти
         GameHelper helper = new GameHelper();
 
-        levelArray.add( new Level( helper.toInts( "0, 1" ), objects.LEVEL0() ) );
-        levelArray.add( new Level( helper.toInts( "1, 2, 0" ) ) );
-        levelArray.add( new Level( helper.toInts( "2, 1" ) ) );
+        levelArray.add( new Level( helper.toInts( "0" ), objects.LEVEL0() ) );
+        //levelArray.add( new Level( helper.toInts( "1, 2, 0" ) ) );
+        //levelArray.add( new Level( helper.toInts( "2, 1" ) ) );
 
         levels = new ImmutableArray< Level >( levelArray );
     }

@@ -41,7 +41,7 @@ public class PhysicalConnectSystem extends IteratingSystem {
         transform.getRotation( rotation );
 
         connectToBody.getWorldTransform().getTranslation( position );
-        position.add( 0,1.1f,0 );
+        position.add( 0,1.0f,0 );
         transform.setToTranslation( position );
         transform.rotate( rotation );
         thisBody.proceedToTransform( transform );

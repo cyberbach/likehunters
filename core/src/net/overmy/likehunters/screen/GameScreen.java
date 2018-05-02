@@ -131,7 +131,6 @@ public class GameScreen extends Base2DScreen {
 
         btRigidBody ghostCameraBody = EntityBuilder.createGhostCamera(body);
 
-        MyCamera.initBody();
         MyCamera.setConnectionBody( ghostCameraBody );
 
         showGameGUI();

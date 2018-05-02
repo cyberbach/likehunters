@@ -75,6 +75,8 @@ public class MyCamera {
             return;
         }
 
+        initBody ();
+
         cameraPhysicalGhostBody = body;
 
         constraint = new btFixedConstraint(

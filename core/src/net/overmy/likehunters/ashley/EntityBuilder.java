@@ -97,7 +97,7 @@ public final class EntityBuilder {
         Entity entity = new Entity();
         entity.add( physicalComponent );
         entity.add( new ModelComponent( modelInstance ) );
-        entity.add( new AnimationComponent( modelInstance ) );
+        //entity.add( new AnimationComponent( modelInstance ) );
         entity.add( new GroundedComponent() );
         entity.add( new LifeComponent( 100.0f, 1, 2 ) );
         entity.add( new TypeOfEntityComponent( TYPE_OF_ENTITY.MYPLAYER ) );

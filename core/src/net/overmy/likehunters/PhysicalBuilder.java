@@ -121,7 +121,7 @@ public class PhysicalBuilder {
         box.getMax( boxSize );
 
         float radius = boxSize.x > boxSize.z ? boxSize.x : boxSize.z;
-        float height = boxSize.y > 2 * radius ? boxSize.y - 2 * radius : 0;
+        float height = boxSize.y;// > 2 * radius ? boxSize.y - 2 * radius : 0;
 
         bodyShape = new btCapsuleShape( radius, height );
         bodyShape.calculateLocalInertia( mass, inertia );
