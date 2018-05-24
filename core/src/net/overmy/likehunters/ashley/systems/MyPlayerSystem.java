@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector2;
@@ -29,7 +30,9 @@ public class MyPlayerSystem extends IteratingSystem {
     private       float   modelAngle     = 0.0f;
 
     private boolean jump = false;
+    private boolean block = false;
 
+    private Vector2 originalDirection = new Vector2(  );
     private Quaternion rotation = new Quaternion();
 
 
@@ -39,8 +42,11 @@ public class MyPlayerSystem extends IteratingSystem {
     }
 
 
+
     @Override
     protected void processEntity ( Entity entity, float delta ) {
+        if(block)return;
+
         btRigidBody playerBody = MyMapper.PHYSICAL.get( entity ).body;
 
         // Двигаем или останавливаем физическое тело
@@ -56,7 +62,13 @@ public class MyPlayerSystem extends IteratingSystem {
             bodyTransform.rotate( Vector3.Y, modelAngle );
             playerBody.proceedToTransform( bodyTransform );
 
-            //MyMapper.ANIMATION.get( entity ).play( 1, 1.0f );
+            if(originalDirection.len()>0.5f) {
+                MyMapper.ANIMATION.get( entity ).play( 2, 2.0f );
+                MyMapper.ANIMATION.get( entity ).queue( 2, 2.0f );
+            }else{
+                MyMapper.ANIMATION.get( entity ).play( 1, 2.0f );
+                MyMapper.ANIMATION.get( entity ).queue( 1, 2.0f );
+            }
         }
         playerBody.setLinearVelocity( velocity );
 /*
@@ -64,20 +76,27 @@ public class MyPlayerSystem extends IteratingSystem {
             jump = false;
             playerBody.applyCentralImpulse( new Vector3( 0, 800, 0 ) );
             MyMapper.ANIMATION.get( entity ).play( 2, 1.0f );
-        }
+        }*/
 
         //MyCamera.setCameraPosition( notFilteredPos );
 
-        MyMapper.ANIMATION.get( entity ).queue( 0,1.0f );*/
+        if ( direction.len() == 0 )
+        MyMapper.ANIMATION.get( entity ).queue( 0,2.0f );
     }
 
 
     public void move ( float x, float y ) {
         direction.set( x, y );
 
+
+        originalDirection.set( direction );
+
         float myspeed = direction.len() * 10;
 
         direction.nor();
+
+
+
         direction.rotate( -MyCamera.getCameraAngle() );
         direction.scl( myspeed );
 
@@ -111,5 +130,14 @@ public class MyPlayerSystem extends IteratingSystem {
         super.removedFromEngine( engine );
 
         //disableWalkSound();
+    }
+
+
+    public void block () {
+        block = true;
+    }
+
+    public void unblock () {
+        block = false;
     }
 }

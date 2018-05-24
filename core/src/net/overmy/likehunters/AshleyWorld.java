@@ -91,7 +91,7 @@ public final class AshleyWorld {
         engine.update( delta );
 
         if ( DEBUG.CONTACTS.get() ) {
-            Gdx.app.debug( "==================================",
+            Gdx.app.debug( "================================== ashley update",
                            "tick ===============================" );
         }
     }

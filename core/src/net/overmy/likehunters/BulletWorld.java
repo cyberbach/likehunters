@@ -30,9 +30,11 @@ public final class BulletWorld {
     public final static int MYWEAPON_FLAG     = 1 << 11;
     public final static int ENEMY_WEAPON_FLAG = 1 << 12;
     public final static int CAMERA_FLAG       = 1 << 13;
+    public final static int PICKABLE_FLAG       = 1 << 14;
+    public final static int NPC_FLAG       = 1 << 15;
 
     //public final static int FILTER_NPC = PLAYER_FLAG | MYWEAPON_FLAG;
-    public final static int PLAYER_FILTER = GROUND_FLAG | ENEMY_WEAPON_FLAG;
+    public final static int PLAYER_FILTER = GROUND_FLAG | ENEMY_WEAPON_FLAG | PICKABLE_FLAG;
 
     private static btDynamicsWorld dynamicsWorld = null;
     private static int             userValue     = -1;

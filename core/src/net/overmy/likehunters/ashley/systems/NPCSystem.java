@@ -276,7 +276,7 @@ public class NPCSystem extends IteratingSystem {
 
         boolean isFlyingNPC = false;
         if ( MyMapper.LEVEL_OBJECT.has( entity ) ) {
-            ModelAsset npcAsset = MyMapper.LEVEL_OBJECT.get( entity ).levelObject.dynamicModelAsset;
+            ModelAsset npcAsset = MyMapper.LEVEL_OBJECT.get( entity ).gameObject.getModelAsset();
             /*isFlyingNPC = npcAsset.equals( ModelAsset.BUTTERFLY ) ||
                           npcAsset.equals( ModelAsset.BIRD1 ) ||
                           npcAsset.equals( ModelAsset.BIRD2ANGRY );*/

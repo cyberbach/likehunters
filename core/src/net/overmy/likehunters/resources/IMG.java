@@ -35,7 +35,7 @@ public enum IMG {
     PAD( "pad" ),
     BUTTON( "button" ),
     AIM( "aim" ),
-    INGAME( "ingame" ),
+    INVENTORY( "inventory" ),
 
     UPGRADE( "upgrade" ),
     JUMP_BUTTON( "jump" ),

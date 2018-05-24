@@ -108,7 +108,7 @@ public class MyEntityListener implements EntityListener {
 
         if ( MyMapper.LEVEL_OBJECT.has( entity ) && MyMapper.NPC.has( entity ) ) {
             if ( MyMapper.NPC.get( entity ).die ) {
-                MyMapper.LEVEL_OBJECT.get( entity ).levelObject.used = true;
+                MyMapper.LEVEL_OBJECT.get( entity ).gameObject.use();
             }
         }
 

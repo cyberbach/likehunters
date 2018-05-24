@@ -13,6 +13,7 @@ import net.overmy.likehunters.resources.TextAsset;
 
 
 public enum Item {
+    //TRIGGER01
     ;
 
     private TextAsset  name       = null;

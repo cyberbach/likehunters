@@ -7,21 +7,21 @@ package net.overmy.likehunters;
 
 public enum DEBUG {
     ENABLE_ENGLISH_TEXT( false ),
-    SETTINGS( true ),
+    SETTINGS( false ),
     STAGE( true ),
     DECAL_ENTITIES( false ),
-    SHOW_MODEL_INFO( true ),
+    SHOW_MODEL_INFO( false ),
     NPC_ACTIONS( false ),
 
-    FPS( true ),
-    SCREEN_FPS( true ), // должен быть включен FPS
+    FPS( false ),
+    SCREEN_FPS( false ), // должен быть включен FPS
 
     ON_WINDOWS( true ),
 
     CONTACTS( false ),
-    ENTITIES( true ),
-    PHYSICAL_MESH( false ),
-    DYNAMIC_LEVELS( true ),
+    ENTITIES( false ),
+    PHYSICAL_MESH( true ),
+    DYNAMIC_LEVELS( false ),
     GAME_MASTER_MODE( true ),
     ;
 

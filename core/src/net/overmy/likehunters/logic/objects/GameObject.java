@@ -12,6 +12,7 @@ public interface GameObject {
     ModelAsset getModelAsset ();
 
     boolean isUsed ();
+    void use();
 
     Entity getEntity ();
     void buildEntity ();

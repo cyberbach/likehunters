@@ -62,6 +62,11 @@ public class InteractSystem extends IteratingSystem {
 
     @Override
     protected void processEntity ( Entity entity, float deltaTime ) {
+
+
+
+        /*
+
         MyMapper.MODEL.get( entity ).modelInstance.transform.getTranslation( position );
 
         final float distance = ray.origin.dst2( position );
@@ -109,7 +114,7 @@ public class InteractSystem extends IteratingSystem {
             entity.add( new SkipScriptComponent() );
         } else {
             entity.remove( SkipScriptComponent.class );
-        }
+        }*/
     }
 
 

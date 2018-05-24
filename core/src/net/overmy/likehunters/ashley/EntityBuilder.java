@@ -7,6 +7,7 @@ package net.overmy.likehunters.ashley;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -17,15 +18,26 @@ import net.overmy.likehunters.BulletWorld;
 import net.overmy.likehunters.PhysicalBuilder;
 import net.overmy.likehunters.ashley.component.AnimationComponent;
 import net.overmy.likehunters.ashley.component.BoundingBoxComponent;
+import net.overmy.likehunters.ashley.component.CollectableComponent;
 import net.overmy.likehunters.ashley.component.GroundedComponent;
+import net.overmy.likehunters.ashley.component.InteractComponent;
 import net.overmy.likehunters.ashley.component.LevelIDComponent;
+import net.overmy.likehunters.ashley.component.LevelObjectComponent;
 import net.overmy.likehunters.ashley.component.LifeComponent;
 import net.overmy.likehunters.ashley.component.ModelComponent;
 import net.overmy.likehunters.ashley.component.MyPlayerComponent;
+import net.overmy.likehunters.ashley.component.NPCComponent;
 import net.overmy.likehunters.ashley.component.PhysicalComponent;
 import net.overmy.likehunters.ashley.component.PhysicalConnectComponent;
 import net.overmy.likehunters.ashley.component.TYPE_OF_ENTITY;
+import net.overmy.likehunters.ashley.component.TYPE_OF_INTERACT;
 import net.overmy.likehunters.ashley.component.TypeOfEntityComponent;
+import net.overmy.likehunters.logic.InteractItem;
+import net.overmy.likehunters.logic.Item;
+import net.overmy.likehunters.logic.NPCAction;
+import net.overmy.likehunters.logic.collectables.Collectable;
+import net.overmy.likehunters.logic.collectables.TriggerCollectable;
+import net.overmy.likehunters.logic.objects.GameObject;
 import net.overmy.likehunters.resources.ModelAsset;
 
 public final class EntityBuilder {
@@ -83,7 +95,7 @@ public final class EntityBuilder {
                 .defaultMotionState()
                 .setMass( 20.0f )
                 .setPosition( position )
-                .capsuleShape()
+                .capsuleShape(0.5f, 1.0f)
                 .setCollisionFlag( CollisionFlags.CF_CHARACTER_OBJECT )
                 .setCallbackFlag( BulletWorld.PLAYER_FLAG )
                 .setCallbackFilter( BulletWorld.PLAYER_FILTER )
@@ -97,7 +109,7 @@ public final class EntityBuilder {
         Entity entity = new Entity();
         entity.add( physicalComponent );
         entity.add( new ModelComponent( modelInstance ) );
-        //entity.add( new AnimationComponent( modelInstance ) );
+        entity.add( new AnimationComponent( modelInstance ) );
         entity.add( new GroundedComponent() );
         entity.add( new LifeComponent( 100.0f, 1, 2 ) );
         entity.add( new TypeOfEntityComponent( TYPE_OF_ENTITY.MYPLAYER ) );
@@ -131,4 +143,91 @@ public final class EntityBuilder {
 
         return body;
     }
+
+
+    public static Entity createPickable ( Vector3 position, InteractItem interactItem ) {
+        ModelInstance modelInstance = interactItem.item.getModelAsset().get();
+
+        PhysicalBuilder physicalBuilderPICKABLE = new PhysicalBuilder()
+                .setModelInstance( modelInstance )
+                .defaultMotionState()
+                .setPosition( position )
+                .setMass( 1.0f )
+                .hullShape()
+                .setStartImpulse( new Vector3( 0, 6, 0 ) )
+                .setCollisionFlag( CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK )
+                .setCallbackFlag( BulletWorld.PICKABLE_FLAG )
+                .setCallbackFilter( BulletWorld.PLAYER_FLAG )
+                .disableDeactivation()
+                .disableRotation();
+
+        Entity entity = new Entity();
+        if ( modelInstance.animations.size > 0 ) {
+            entity.add( new AnimationComponent( modelInstance ) );
+        }
+        entity.add( new ModelComponent( modelInstance ) );
+        entity.add( new TypeOfEntityComponent( TYPE_OF_ENTITY.PICKABLE ) );
+        entity.add( new InteractComponent( TYPE_OF_INTERACT.LOOT, interactItem ) );
+        entity.add( physicalBuilderPICKABLE.buildPhysicalComponent() );
+        engine.addEntity( entity );
+        return entity;
+    }
+
+    public static Entity createTrigger ( GameObject gameObject, TriggerCollectable triggerCollectable, Vector3 position, float size ) {
+        PhysicalBuilder physicalBuilderPICKABLE = new PhysicalBuilder()
+                .defaultMotionState()
+                .setPosition( position )
+                .zeroMass()
+                .boxShape( size )
+                .setCollisionFlag( CollisionFlags.CF_NO_CONTACT_RESPONSE )
+                .setCallbackFlag( BulletWorld.PICKABLE_FLAG )
+                .setCallbackFilter( BulletWorld.PLAYER_FLAG )
+                .disableDeactivation();
+
+        Entity entity = new Entity();
+        entity.add( new TypeOfEntityComponent( TYPE_OF_ENTITY.COLLECTABLE ) );
+        //entity.add( new InteractComponent( TYPE_OF_INTERACT.LOOT, triggerCollectable ) );
+        entity.add( new CollectableComponent(triggerCollectable) );
+        entity.add( new LevelObjectComponent( gameObject ) );
+        entity.add( physicalBuilderPICKABLE.buildPhysicalComponent() );
+        engine.addEntity( entity );
+        return entity;
+    }
+
+
+    public static Entity createNPC ( Vector3 position,
+                                     ModelAsset modelAsset,
+                                     ImmutableArray< NPCAction > actionArray) {
+
+        ModelInstance modelInstance = modelAsset.get();
+
+        PhysicalBuilder physicalBuilderNPC = new PhysicalBuilder()
+                .setModelInstance( modelInstance )
+                .defaultMotionState()
+                .setPosition( position )
+                .setMass( 60.0f )
+                .capsuleShape()
+                .setCollisionFlag( CollisionFlags.CF_CHARACTER_OBJECT )
+                .setCallbackFlag( BulletWorld.NPC_FLAG )
+                .setCallbackFilter( BulletWorld.GROUND_FLAG )
+                .disableRotation()
+                .disableDeactivation();
+
+        PhysicalComponent physicalComponent = physicalBuilderNPC.buildPhysicalComponent();
+        physicalComponent.body.setRollingFriction( 0.1f );
+        physicalComponent.body.setFriction( 0.1f );
+        physicalComponent.body.setSpinningFriction( 0.1f );
+
+        Entity entity = new Entity();
+        entity.add( new ModelComponent( modelInstance ) );
+        entity.add( new AnimationComponent( modelInstance ) );
+        entity.add( new TypeOfEntityComponent( TYPE_OF_ENTITY.NPC ) );
+        entity.add( new NPCComponent( actionArray ) );
+        entity.add( physicalComponent );
+        engine.addEntity( entity );
+
+        return entity;
+    }
+
+
 }

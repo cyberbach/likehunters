@@ -38,9 +38,9 @@ public final class DynamicLevels {
         // на выходе из этого метода GameHelper удалится из памяти
         GameHelper helper = new GameHelper();
 
-        levelArray.add( new Level( helper.toInts( "0" ), objects.LEVEL0() ) );
-        //levelArray.add( new Level( helper.toInts( "1, 2, 0" ) ) );
-        //levelArray.add( new Level( helper.toInts( "2, 1" ) ) );
+        levelArray.add( new Level( helper.toInts( "0, 1" ), objects.LEVEL0() ) );
+        levelArray.add( new Level( helper.toInts( "1, 2, 0" ) ) );
+        levelArray.add( new Level( helper.toInts( "2, 1" ), objects.LEVEL2() ) );
 
         levels = new ImmutableArray< Level >( levelArray );
     }
@@ -193,6 +193,7 @@ public final class DynamicLevels {
                     ModelAsset assetOfObject = object.getModelAsset();
                     if ( assetOfObject != null ) {
                         if ( loadingNotInDynamicLevels( assetOfObject ) ) {
+                            //Gdx.app.debug( "loadingNotInDynamicLevels", "assetOfObject = "+assetOfObject );
                             assetOfObject.load();
                         }
                     }
@@ -223,7 +224,7 @@ public final class DynamicLevels {
                 for ( GameObject object : level.objects ) {
                     ModelAsset assetOfObject = object.getModelAsset();
                     if ( assetOfObject != null ) {
-                        if ( loadingNotInDynamicLevels( assetOfObject ) ) {
+                       if ( loadingNotInDynamicLevels( assetOfObject ) ) {
                             if ( object.getEntity() == null ) {
                                 assetOfObject.build();
                             }
@@ -247,14 +248,14 @@ public final class DynamicLevels {
         boolean gun = ModelAsset.GUN_WEAPON.equals( asset );
         return !( broom || rake || kalash || fence || pillow || gun );
         */
-        return false;
+        return true;
     }
 
 
     private static boolean needToUpdate = false;
     private static boolean needToBuild  = false;
 
-    private static final float MAX_UNLOAD_DELAY = 0.2f;
+    private static final float MAX_UNLOAD_DELAY = 0.1f;
 
     private static float unloadDelay = MAX_UNLOAD_DELAY;
 
@@ -297,7 +298,7 @@ public final class DynamicLevels {
             if ( unloadDelay <= 0 ) {
 
                 if ( DEBUG.DYNAMIC_LEVELS.get() ) {
-                    Gdx.app.debug( "unloadDelay", "tick" );
+                    Gdx.app.debug( "unloadDelay", "tick (dynamic levels)" );
                 }
 
                 // Здесь ненужные модели добавляются в стэк удаления менеджера Assets

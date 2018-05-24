@@ -7,8 +7,7 @@ package net.overmy.likehunters.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -27,6 +26,7 @@ import net.overmy.likehunters.MyCamera;
 import net.overmy.likehunters.MyGdxGame;
 import net.overmy.likehunters.ashley.EntityBuilder;
 import net.overmy.likehunters.ashley.systems.MyPlayerSystem;
+import net.overmy.likehunters.logic.cutscenes.CutScene;
 import net.overmy.likehunters.logic.GameHelper;
 import net.overmy.likehunters.MyRender;
 import net.overmy.likehunters.ashley.systems.DecalSystem;
@@ -43,10 +43,10 @@ import java.util.ArrayList;
 
 public class GameScreen extends Base2DScreen {
 
-    private Image showIngameMenuImage = null;
-    private Image aimImage            = null;
-    private Image attackButton        = null;
-    private Image jumpButton          = null;
+    private Image inventoryButton = null;
+    private Image aimImage        = null;
+    private Image attackButton    = null;
+    private Image jumpButton      = null;
 
     private Touchpad touchpad = null;
 
@@ -123,10 +123,14 @@ public class GameScreen extends Base2DScreen {
             MyPlayer.addToBag( Item.GUN_WEAPON_UPGRADED );*/
         }
 
+
+
+        ModelInstance playerInstance = ModelAsset.MY_PLAYER.get();
+
         btRigidBody body = null;
 
         GameHelper helper = new GameHelper();
-        body = EntityBuilder.createPlayer( ModelAsset.TEST_NPC.get(),
+        body = EntityBuilder.createPlayer( playerInstance,
                                     helper.startPositions[ DynamicLevels.getCurrent() ] );
 
         btRigidBody ghostCameraBody = EntityBuilder.createGhostCamera(body);
@@ -134,12 +138,14 @@ public class GameScreen extends Base2DScreen {
         MyCamera.setConnectionBody( ghostCameraBody );
 
         showGameGUI();
+
+        CutScene.setGameScene(this);
     }
 
 
     @Override
     public boolean touchDragged ( float x, float y ) {
-        if ( guiType == GUI_TYPE.INGAME_MENU ) {
+        if ( guiType == GUI_TYPE.INVENTORY_MENU ) {
             return false;
         }
 
@@ -166,6 +172,8 @@ public class GameScreen extends Base2DScreen {
     public void update ( float delta ) {
         super.update( delta );
 
+        CutScene.update(delta);
+
         //MusicAsset.playRandom( delta );
 
         if ( DEBUG.GAME_MASTER_MODE.get() ) {
@@ -175,8 +183,8 @@ public class GameScreen extends Base2DScreen {
 
                 String pos = "new Vector3( " + thisPosition.x + "f, " +
                              thisPosition.y + "f, " + thisPosition.z + "f )";
-                Gdx.app.debug( "Pushed angle = " +
-                               playerSystem.getAngle(), "\n" + pos );
+                Gdx.app.debug( "Pushed angle = " + playerSystem.getAngle(), "\n" + pos );
+                Gdx.app.debug( "Current camera angle = " + MyCamera.filteredCameraAngle, "\n" );
                 Gdx.app.debug( "THIS LOCATION", "" + DynamicLevels.getCurrent() );
             }
 
@@ -307,16 +315,14 @@ public class GameScreen extends Base2DScreen {
     @Override
     public void backButton () {
         //SoundAsset.BackSound.play();
-        if ( guiType == GUI_TYPE.INGAME_MENU ) {
+        if ( guiType == GUI_TYPE.INVENTORY_MENU ) {
             //showGameGUI();
         } else {
-            touchPadGroup.clearActions();
-            jumpButton.clearActions();
-            UIHelper.scaleOut( touchPadGroup );
-            UIHelper.scaleOut( jumpButton );
+            hideGameGUI();
             transitionTo( MyGdxGame.SCREEN_TYPE.MENU );
         }
     }
+
 
 
     @Override
@@ -340,7 +346,21 @@ public class GameScreen extends Base2DScreen {
     }
 
 
-    private void showGameGUI () {
+    public void hideGameGUI () {
+        guiType = GUI_TYPE.NONE;
+
+        touchPadGroup.clearActions();
+        attackButton.clearActions();
+        jumpButton.clearActions();
+        inventoryButton.clearActions();
+        UIHelper.scaleOut( touchPadGroup );
+        UIHelper.scaleOut( jumpButton );
+        UIHelper.scaleOut( attackButton );
+        UIHelper.scaleOut( inventoryButton );
+    }
+
+
+    public void showGameGUI () {
         guiType = GUI_TYPE.GAME_GUI;
 
         gameGroup.clear();
@@ -429,28 +449,31 @@ public class GameScreen extends Base2DScreen {
 
         float inGameIconSize = Core.HEIGHT * 0.16f;
 
-        if ( showIngameMenuImage == null ) {
-            showIngameMenuImage = IMG.INGAME.getImageActor( inGameIconSize,
-                                                            inGameIconSize );
-            showIngameMenuImage.setPosition( Core.WIDTH - inGameIconSize,
+        if ( inventoryButton == null ) {
+            inventoryButton = IMG.INVENTORY.getImageActor( inGameIconSize,
+                                                            inGameIconSize/2 );
+            inventoryButton.setPosition( Core.WIDTH - inGameIconSize,
                                              Core.HEIGHT - inGameIconSize );
-            showIngameMenuImage.addListener( new ClickListener() {
+            inventoryButton.addListener( new ClickListener() {
                 public void clicked ( InputEvent event, float x, float y ) {
                     if ( showGameOver ) {
                         return;
                     }
                     //SoundAsset.Click.play();
-                    UIHelper.clickAnimation( showIngameMenuImage );
+                    UIHelper.clickAnimation( inventoryButton );
                     //showInGameMenu();
                 }
             } );
+        }else{
+            UIHelper.scaleIn( inventoryButton );
         }
-        gameGroup.addActor( showIngameMenuImage );
+        gameGroup.addActor( inventoryButton );
     }
 
 
     private enum GUI_TYPE {
+        NONE,
         GAME_GUI,
-        INGAME_MENU
+        INVENTORY_MENU
     }
 }

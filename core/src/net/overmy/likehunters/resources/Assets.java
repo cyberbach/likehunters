@@ -55,7 +55,8 @@ public final class Assets {
 
         //TextureAsset.load();
 
-        ModelAsset.TEST_NPC.load();
+        ModelAsset.MY_PLAYER.load();
+        //ModelAsset.BOY.load();
     }
 
 
@@ -65,7 +66,8 @@ public final class Assets {
         //SoundAsset.build( manager );
         IMG.build( manager );
         //TextureAsset.build();
-        ModelAsset.TEST_NPC.build();
+        ModelAsset.MY_PLAYER.build();
+        //ModelAsset.BOY.build();
     }
 
 
@@ -84,7 +86,8 @@ public final class Assets {
 
         Settings.save();
 
-        ModelAsset.TEST_NPC.unload();
+        ModelAsset.MY_PLAYER.unload();
+        //ModelAsset.BOY.unload();
 
     }
 

@@ -124,7 +124,7 @@ public class LifeSystem extends IteratingSystem {
                         }*/
                     }
                 } else {
-                    MyMapper.LEVEL_OBJECT.get( entity ).levelObject.useEntity();
+                    MyMapper.LEVEL_OBJECT.get( entity ).gameObject.use();
                 }
             } else {
                 entity.add( new RemoveByTimeComponent( 0 ) );

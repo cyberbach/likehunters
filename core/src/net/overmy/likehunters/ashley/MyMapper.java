@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 
 import net.overmy.likehunters.ashley.component.AnimationComponent;
 import net.overmy.likehunters.ashley.component.BoundingBoxComponent;
+import net.overmy.likehunters.ashley.component.CollectableComponent;
 import net.overmy.likehunters.ashley.component.ContainerComponent;
 import net.overmy.likehunters.ashley.component.DecalComponent;
 import net.overmy.likehunters.ashley.component.DoorComponent;
@@ -56,7 +57,8 @@ public final class MyMapper {
     public static ComponentMapper< Stage2DGroupComponent > GROUP_IN_STAGE = null;
     public static ComponentMapper< SkipScriptComponent >   SKIP           = null;
     public static ComponentMapper< DoorComponent >         DOOR           = null;
-    public static ComponentMapper< MyPlayerComponent >     MY_PLAYER           = null;
+    public static ComponentMapper< MyPlayerComponent >     MY_PLAYER      = null;
+    public static ComponentMapper< CollectableComponent >  COLLECTABLE    = null;
 
 
     private MyMapper () {
@@ -88,6 +90,7 @@ public final class MyMapper {
         SKIP = ComponentMapper.getFor( SkipScriptComponent.class );
         DOOR = ComponentMapper.getFor( DoorComponent.class );
         MY_PLAYER = ComponentMapper.getFor( MyPlayerComponent.class );
+        COLLECTABLE = ComponentMapper.getFor( CollectableComponent.class );
     }
 
 
@@ -116,5 +119,6 @@ public final class MyMapper {
         SKIP = null;
         DOOR = null;
         MY_PLAYER = null;
+        COLLECTABLE = null;
     }
 }

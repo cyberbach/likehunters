@@ -9,7 +9,7 @@ import net.overmy.likehunters.resources.ModelAsset;
         Created by Andrey Mikheev on 20.04.2018
         Contact me → http://vk.com/id17317
 */
-public class Ladder implements GameObject {
+public class LadderObject implements GameObject {
 
     private Entity entity = null;
 
@@ -23,6 +23,12 @@ public class Ladder implements GameObject {
     @Override
     public boolean isUsed () {
         return false;
+    }
+
+
+    @Override
+    public void use () {
+
     }
 
 

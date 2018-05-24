@@ -7,10 +7,16 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
 
 import net.overmy.likehunters.ashley.MyMapper;
+import net.overmy.likehunters.ashley.component.CollectableComponent;
 import net.overmy.likehunters.ashley.component.LevelIDComponent;
+import net.overmy.likehunters.ashley.component.OutOfCameraComponent;
 import net.overmy.likehunters.ashley.component.PhysicalComponent;
+import net.overmy.likehunters.ashley.component.RemoveByTimeComponent;
 import net.overmy.likehunters.ashley.component.TYPE_OF_ENTITY;
 import net.overmy.likehunters.logic.DynamicLevels;
+import net.overmy.likehunters.logic.collectables.Collectable;
+import net.overmy.likehunters.logic.collectables.CollectableProcessor;
+import net.overmy.likehunters.logic.objects.GameObject;
 
 /*
       Created by Andrey Mikheev on 30.09.2017
@@ -168,9 +174,6 @@ public class WorldContactListener extends ContactListener {
             return;
         }
 
-
-
-
         if ( contact2Player && contact1Ground ) {
             LevelIDComponent levelComponent = MyMapper.REMOVE_BY_ZONE.get( entity01 );
 
@@ -191,7 +194,6 @@ public class WorldContactListener extends ContactListener {
             MyMapper.GROUNDED.get( entity02 ).grounded = true;
             return;
         }
-
 
         boolean contact2Ladder = type2.equals( TYPE_OF_ENTITY.LADDER );
 
@@ -216,21 +218,26 @@ public class WorldContactListener extends ContactListener {
                 MyMapper.PHYSICAL.get( entity02 ).body.getWorldTransform()
                                                       .getTranslation( tempPosition1 );
             }
-/*
+
             if ( contact1Player && contact2Collectable ) {
-                entity02.add( new OutOfCameraComponent() );
-
-                Item item = MyMapper.COLLECTABLE.get( entity02 ).item;
-                CollectableProcessor.process( item, tempPosition1 );
-
                 // Устанавливаем в levelObject флаг, чтобы предмет
                 // не создался снова, при перезагрузке уровня
+                entity02.add( new RemoveByTimeComponent( 0 ) );
                 if ( MyMapper.LEVEL_OBJECT.has( entity02 ) ) {
-                    MyMapper.LEVEL_OBJECT.get( entity02 ).levelObject.useEntity();
-                } else {
-                    entity02.add( new RemoveByTimeComponent( 0 ) );
+                    GameObject gameObject = MyMapper.LEVEL_OBJECT.get( entity02 ).gameObject;
+                    if ( gameObject.isUsed() ) {
+                        return;
+                    } else {
+                        Collectable c = MyMapper.COLLECTABLE.get( entity02 ).collectable;
+                        CollectableProcessor.process( c );
+//                        entity02.add( new RemoveByTimeComponent( 0 ) );
+                        entity02.remove( CollectableComponent.class );
+                        //CollectableProcessor.process( item, tempPosition1 );
+
+                        gameObject.use();
+                    }
                 }
-            }*/
+            }
         }
 
         /*if ( ( contact1NPC && contact2Player ) || ( contact2NPC && contact1Player ) ) {

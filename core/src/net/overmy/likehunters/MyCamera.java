@@ -24,14 +24,14 @@ import net.overmy.likehunters.utils.Vector3Animator;
 public class MyCamera {
 
     private static Vector3 cameraDirection = new Vector3( 0, 0, -1 );
+    public static Vector3           filteredPosition    = new Vector3();
 
     private static Vector3           cameraPosition      = new Vector3();
     private static Vector3Animator   camMotion           = new Vector3Animator();
-    private static Vector3           filteredPosition    = new Vector3();
     private static DirectionalLight  light               = null;
     private static float             cameraAngle         = 0.0f;
     private static PerspectiveCamera camera              = null;
-    private static float             filteredCameraAngle = 0.0f;
+    public static float             filteredCameraAngle = 0.0f;
 
 
     private static btRigidBody cameraPhysicalBody      = null;
@@ -41,6 +41,8 @@ public class MyCamera {
 
     private static Quaternion lastRotation = new Quaternion();
     private static Vector3    lastPosition = new Vector3();
+
+    private static boolean block = false;
 
 
     private MyCamera () {
@@ -61,6 +63,7 @@ public class MyCamera {
         Color lightColor = new Color( 0.6f, 0.6f, 0.6f, 1.0f );
         light = new DirectionalLight();
         light.set( lightColor, 0, 0, 0 );
+        unblock ();
     }
 
 
@@ -75,7 +78,7 @@ public class MyCamera {
             return;
         }
 
-        initBody ();
+        initBody();
 
         cameraPhysicalGhostBody = body;
 
@@ -127,25 +130,27 @@ public class MyCamera {
     public static void update ( float delta ) {
         updateMotion( delta );
 
-        if ( Gdx.input.isKeyJustPressed( Input.Keys.LEFT ) ) {
-            Matrix4 ghostTransform = cameraPhysicalGhostBody.getWorldTransform();
-            ghostTransform.rotate( Vector3.Y, 15 );
-            cameraPhysicalGhostBody.setWorldTransform( ghostTransform );
+        if ( !block ) {
+            if ( Gdx.input.isKeyJustPressed( Input.Keys.LEFT ) ) {
+                Matrix4 ghostTransform = cameraPhysicalGhostBody.getWorldTransform();
+                ghostTransform.rotate( Vector3.Y, 15 );
+                cameraPhysicalGhostBody.setWorldTransform( ghostTransform );
+            }
+
+            if ( Gdx.input.isKeyJustPressed( Input.Keys.RIGHT ) ) {
+                Matrix4 ghostTransform = cameraPhysicalGhostBody.getWorldTransform();
+                ghostTransform.rotate( Vector3.Y, -15 );
+                cameraPhysicalGhostBody.setWorldTransform( ghostTransform );
+            }
+
+            Vector3 positionOfPhysicalBody = new Vector3();
+            cameraPhysicalBody.getWorldTransform().getTranslation( positionOfPhysicalBody );
+
+            filteredCameraAngle = LowPassFilter( filteredCameraAngle, cameraAngle );
+            filteredPosition.x = LowPassFilter( filteredPosition.x, positionOfPhysicalBody.x );
+            filteredPosition.y = LowPassFilter( filteredPosition.y, positionOfPhysicalBody.y );
+            filteredPosition.z = LowPassFilter( filteredPosition.z, positionOfPhysicalBody.z );
         }
-
-        if ( Gdx.input.isKeyJustPressed( Input.Keys.RIGHT ) ) {
-            Matrix4 ghostTransform = cameraPhysicalGhostBody.getWorldTransform();
-            ghostTransform.rotate( Vector3.Y, -15 );
-            cameraPhysicalGhostBody.setWorldTransform( ghostTransform );
-        }
-
-        Vector3 positionOfPhysicalBody = new Vector3();
-        cameraPhysicalBody.getWorldTransform().getTranslation( positionOfPhysicalBody );
-
-        filteredCameraAngle = LowPassFilter( filteredCameraAngle, cameraAngle );
-        filteredPosition.x = LowPassFilter( filteredPosition.x, positionOfPhysicalBody.x );
-        filteredPosition.y = LowPassFilter( filteredPosition.y, positionOfPhysicalBody.y );
-        filteredPosition.z = LowPassFilter( filteredPosition.z, positionOfPhysicalBody.z );
 
         camera.position.set( filteredPosition );
         camera.direction.set( cameraDirection );
@@ -206,5 +211,15 @@ public class MyCamera {
 
     public void dispose () {
         camera = null;
+    }
+
+
+    public static void block () {
+        block = true;
+    }
+
+
+    public static void unblock () {
+        block = false;
     }
 }

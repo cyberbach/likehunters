@@ -24,7 +24,8 @@ public enum ModelAsset {
     Level1,
     Level2,
 
-    TEST_NPC( "test" ),
+    MY_PLAYER( "man2" ),
+    BOY( "player" ),
     ;
 
     private StringBuilder stringBuilder = new StringBuilder();
