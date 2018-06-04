@@ -1,9 +1,16 @@
 package net.overmy.likehunters;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.utils.Logger;
+
+import net.overmy.likehunters.resources.Assets;
+import net.overmy.likehunters.screen.GameScreen;
+import net.overmy.likehunters.screen.LoadingScreen;
+import net.overmy.likehunters.screen.MenuScreen;
 
 /*
         Created by Andrey Mikheev on 04.06.2018
@@ -14,6 +21,10 @@ public class MyGdxGame extends ApplicationAdapter {
     private boolean disableRender = false;
     private Screen  screen        = null;
 
+    private final float red   = Core.BG_COLOR.r;
+    private final float green = Core.BG_COLOR.g;
+    private final float blue  = Core.BG_COLOR.b;
+
 
     public MyGdxGame () {
     }
@@ -21,11 +32,23 @@ public class MyGdxGame extends ApplicationAdapter {
 
     @Override
     public void create () {
+        Gdx.app.setLogLevel( Application.LOG_DEBUG );
+
+        Assets.init();
+        Assets.setManagerLogLevel( Logger.NONE );
+
+        MyRender.init();
+
+        switchTo( SCREEN_TYPE.LOADING_MENU );
     }
 
 
     @Override
     public void resize ( int width, int height ) {
+        Core.WIDTH = width;
+        Core.HEIGHT = height;
+        Core.WIDTH_HALF = width / 2;
+        Core.HEIGHT_HALF = height / 2;
         screen.resize( width, height );
     }
 
@@ -36,7 +59,7 @@ public class MyGdxGame extends ApplicationAdapter {
             return;
         }
 
-        Gdx.gl.glClearColor( 0, 0, 0, 1 );
+        Gdx.gl.glClearColor( red, green, blue, 1 );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 
         screen.render( Gdx.graphics.getDeltaTime() );
@@ -59,19 +82,20 @@ public class MyGdxGame extends ApplicationAdapter {
 
     @Override
     public void dispose () {
+        Assets.unload();
     }
 
 
-    public void switchTo ( final SCREEN_TYPE screenType ) {
+    public void switchTo ( SCREEN_TYPE screenType ) {
         if ( screen != null ) {
             disableRender = true;
             screen.hide();
             screen.dispose();
         }
-/*
+
 
         if ( DEBUG.anything() ) {
-            Gdx.app.debug( "? Screen switch to", screenType.toString() );
+            Gdx.app.debug( "••••• Screen switch to", screenType.toString() );
         }
 
         switch ( screenType ) {
@@ -95,7 +119,6 @@ public class MyGdxGame extends ApplicationAdapter {
                 Gdx.app.exit();
                 return;
         }
-*/
 
         disableRender = false;
         screen.show();
