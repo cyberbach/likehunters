@@ -1,66 +1,31 @@
 package net.overmy.likehunters;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.utils.Logger;
-
-import net.overmy.likehunters.logic.DynamicLevels;
-import net.overmy.likehunters.resources.Assets;
-import net.overmy.likehunters.resources.GameColor;
-import net.overmy.likehunters.resources.Settings;
-import net.overmy.likehunters.screen.GameScreen;
-import net.overmy.likehunters.screen.LoadingScreen;
-import net.overmy.likehunters.screen.MenuScreen;
 
 /*
-     Created by Andrey Mikheev on 20.04.2017
-     Contact me → http://vk.com/id17317
- */
-
+        Created by Andrey Mikheev on 04.06.2018
+        Contact me → http://vk.com/id17317
+*/
 public class MyGdxGame extends ApplicationAdapter {
 
     private boolean disableRender = false;
-
-    private Screen screen = null;
-
-    private final float r;
-    private final float g;
-    private final float b;
+    private Screen  screen        = null;
 
 
     public MyGdxGame () {
-        r = GameColor.BG.get().r;
-        g = GameColor.BG.get().g;
-        b = GameColor.BG.get().b;
     }
 
 
     @Override
     public void create () {
-        Gdx.app.setLogLevel( Application.LOG_DEBUG );
-        Settings.load();
-        Assets.init();
-        Assets.setManagerLogLevel( Logger.NONE );
-
-        BulletWorld.init();
-        MyRender.init();// Здесь создание всех камер (2д и 3д) и всех батчей (2д, 3д и Декали)
-        AshleyWorld.init();
-
-        //MyPlayer.clearAll();
-
-        // Создание и загрузка уровней
-        DynamicLevels.init();
-
-        switchTo( SCREEN_TYPE.LOADING_MENU );
     }
 
 
     @Override
     public void resize ( int width, int height ) {
-        Core.resize( width, height );
         screen.resize( width, height );
     }
 
@@ -71,7 +36,7 @@ public class MyGdxGame extends ApplicationAdapter {
             return;
         }
 
-        Gdx.gl.glClearColor( r, g, b, 1 );
+        Gdx.gl.glClearColor( 0, 0, 0, 1 );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 
         screen.render( Gdx.graphics.getDeltaTime() );
@@ -87,9 +52,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
     @Override
     public void resume () {
-        Assets.getManager().update();
-        Assets.getManager().finishLoading();
-
         disableRender = false;
         screen.resume();
     }
@@ -97,10 +59,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
     @Override
     public void dispose () {
-        AshleyWorld.dispose();
-        BulletWorld.dispose();
-        Assets.unload();
-        MyRender.dispose();
     }
 
 
@@ -110,9 +68,10 @@ public class MyGdxGame extends ApplicationAdapter {
             screen.hide();
             screen.dispose();
         }
+/*
 
         if ( DEBUG.anything() ) {
-            Gdx.app.debug( "► Screen switch to", screenType.toString() );
+            Gdx.app.debug( "? Screen switch to", screenType.toString() );
         }
 
         switch ( screenType ) {
@@ -136,6 +95,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 Gdx.app.exit();
                 return;
         }
+*/
 
         disableRender = false;
         screen.show();
