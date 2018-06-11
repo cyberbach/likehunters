@@ -1,4 +1,4 @@
-package net.overmy.likehunters.resources;
+package net.overmy.likehunters.resource;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -33,10 +33,10 @@ public enum IMG {
     PARTICLE_TRI4( "tri4" ),
     PARTICLE_TRI5( "tri5" ),;
 
-    private final static String ATLAS_PATH = "gfx/pack.atlas";
+    private final static String       ATLAS_PATH = "gfx/pack.atlas";
+    private static       AssetManager manager    = null;
+    private static       TextureAtlas atlas      = null;
 
-    private static TextureAtlas atlas   = null;
-    private static AssetManager manager = null;
     private final String name;
 
 

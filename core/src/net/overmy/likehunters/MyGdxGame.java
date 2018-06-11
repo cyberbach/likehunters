@@ -7,10 +7,16 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Logger;
 
-import net.overmy.likehunters.resources.Assets;
+import net.overmy.likehunters.ashley.AshleyWorld;
+import net.overmy.likehunters.bullet.BulletWorld;
+import net.overmy.likehunters.logic.DynamicLevels;
+import net.overmy.likehunters.resource.Assets;
+import net.overmy.likehunters.resource.Settings;
+import net.overmy.likehunters.screen.CutSceneScreen;
 import net.overmy.likehunters.screen.GameScreen;
 import net.overmy.likehunters.screen.LoadingScreen;
 import net.overmy.likehunters.screen.MenuScreen;
+import net.overmy.likehunters.screen.MyRender;
 
 /*
         Created by Andrey Mikheev on 04.06.2018
@@ -34,11 +40,13 @@ public class MyGdxGame extends ApplicationAdapter {
     public void create () {
         Gdx.app.setLogLevel( Application.LOG_DEBUG );
 
+        Settings.load();
         Assets.init();
-        Assets.setManagerLogLevel( Logger.NONE );
+        Assets.setLogLevel( Logger.DEBUG );
 
         MyRender.init();
 
+        // start game here
         switchTo( SCREEN_TYPE.LOADING_MENU );
     }
 
@@ -82,7 +90,12 @@ public class MyGdxGame extends ApplicationAdapter {
 
     @Override
     public void dispose () {
+        DynamicLevels.dispose();
+        AshleyWorld.dispose();
+        BulletWorld.dispose();
         Assets.unload();
+        MyRender.dispose();
+        Settings.save();
     }
 
 
@@ -92,7 +105,6 @@ public class MyGdxGame extends ApplicationAdapter {
             screen.hide();
             screen.dispose();
         }
-
 
         if ( DEBUG.anything() ) {
             Gdx.app.debug( "••••• Screen switch to", screenType.toString() );
@@ -115,6 +127,10 @@ public class MyGdxGame extends ApplicationAdapter {
                 screen = new GameScreen( this );
                 break;
 
+            case CUT:
+                screen = new CutSceneScreen( this );
+                break;
+
             case EXIT:
                 Gdx.app.exit();
                 return;
@@ -126,6 +142,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
 
     public enum SCREEN_TYPE {
-        LOADING_MENU, LOADING_GAME, MENU, GAME, EXIT
+        LOADING_MENU, LOADING_GAME, MENU, GAME, CUT, EXIT
     }
 }

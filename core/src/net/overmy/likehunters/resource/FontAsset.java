@@ -1,4 +1,4 @@
-package net.overmy.likehunters.resources;
+package net.overmy.likehunters.resource;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -15,8 +15,9 @@ public enum FontAsset {
     MENU_TITLE( "bb.otf", 32, 1 ),;
 
     private static AssetManager manager = null;
-    private final String path;
+
     private final int    size;
+    private final String path;
     private final float  borderSize;
     private final Color  color;
     private final Color  borderColor;

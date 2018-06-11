@@ -1,4 +1,4 @@
-package net.overmy.adventure.ashley.components;
+package net.overmy.likehunters.ashley.component;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.audio.Sound;
@@ -9,7 +9,7 @@ import com.badlogic.gdx.audio.Sound;
 */
 public class WalkSoundComponent implements Component {
     public Sound walk;
-    private long id = 0;
+    public long id = 0;
 /*
 
     public WalkSoundComponent ( Sound walk ) {

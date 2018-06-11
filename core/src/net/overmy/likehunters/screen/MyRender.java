@@ -1,4 +1,4 @@
-package net.overmy.likehunters;
+package net.overmy.likehunters.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -11,13 +11,17 @@ import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
+import com.badlogic.gdx.graphics.g3d.decals.GroupStrategy;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import net.overmy.likehunters.Core;
+import net.overmy.likehunters.DEBUG;
 import net.overmy.likehunters.utils.FloatAnimator;
 
 /*
@@ -63,12 +67,13 @@ public final class MyRender {
         stage = new Stage( viewport, spriteBatch );
         stage.setDebugAll( DEBUG.STAGE.get() );
 
-/*
+
         MyCamera.init();
 
-        final GroupStrategy groupStrategy = new CameraGroupStrategy( MyCamera.get() );
+        final GroupStrategy groupStrategy = new CameraGroupStrategy(
+                MyCamera.getPerspectiveCamera() );
         decalBatch = new DecalBatch( groupStrategy );
-*/
+
 
         overlappingFullScreen = createBGSprite();
         transition = new FloatAnimator( 1, 1, 0 );
@@ -90,7 +95,7 @@ public final class MyRender {
 
         final Attribute fog = new ColorAttribute( ColorAttribute.Fog, 0, 0, 0, 1f );
         environment.set( fog );
-        //environment.add( MyCamera.getLight() );
+        environment.add( MyCamera.getLight() );
     }
 
 
@@ -124,14 +129,13 @@ public final class MyRender {
     }
 
 
-    public static void TransitionIN () {
-        transition.setFrom( 0 ).setTo( 1 ).resetTime();
+    public static void TransitionIN ( float time ) {
+        transition.setFrom( 0 ).setTo( 1 ).setAnimationTime( time ).resetTime();
     }
 
 
-    public static void TransitionOUT () {
-        transition.setAnimationTime( Core.FADE );
-        transition.setFrom( 1 ).setTo( 0 ).resetTime();
+    public static void TransitionOUT ( float time ) {
+        transition.setFrom( 1 ).setTo( 0 ).setAnimationTime( time ).resetTime();
     }
 
 

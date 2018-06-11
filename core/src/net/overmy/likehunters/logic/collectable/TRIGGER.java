@@ -1,4 +1,4 @@
-package net.overmy.likehunters.logic.collectables;
+package net.overmy.likehunters.logic.collectable;
 
 /*
         Created by Andrey Mikheev on 18.05.2018

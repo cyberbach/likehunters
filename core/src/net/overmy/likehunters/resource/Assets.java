@@ -1,4 +1,4 @@
-package net.overmy.likehunters.resources;
+package net.overmy.likehunters.resource;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.AssetLoader;
@@ -31,37 +31,47 @@ public class Assets {
         manager.setLoader( FreeTypeFontGenerator.class, fontsGenerator );
         manager.setLoader( BitmapFont.class, ".ttf", fontsLoader );
 
+        TextAsset.init();
         FontAsset.setManager( manager );
         IMG.setManager( manager );
+        ModelAsset.setManager( manager );
+        MusicAsset.setManager( manager );
+        SoundAsset.setManager( manager );
     }
 
 
-    public static void setManagerLogLevel ( int LOG_LEVEL ) {
-        manager.getLogger().setLevel( LOG_LEVEL );
+    public static void setLogLevel ( int logLevel ) {
+        manager.getLogger().setLevel( logLevel );
     }
-
 
     public static void load () {
         FontAsset.load();
         IMG.load();
+        MusicAsset.Main.load();
+        SoundAsset.load();
     }
 
 
     public static void build () {
         FontAsset.build();
         IMG.build();
+        MusicAsset.Main.build();
+        SoundAsset.build();
     }
 
 
     public static void unload () {
         FontAsset.unload();
         IMG.unload();
+        ModelAsset.unloadAll();
+        MusicAsset.unloadAll();
+        SoundAsset.unloadAll();
 
         manager.finishLoading();
         manager.dispose();
-
-        /*Settings.save();*/
     }
+
+
 
 
     public static AssetManager getManager () {
