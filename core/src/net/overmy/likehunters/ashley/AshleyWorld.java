@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import net.overmy.likehunters.DEBUG;
 import net.overmy.likehunters.ashley.system.AnimationSystem;
 import net.overmy.likehunters.ashley.system.MyPlayerSystem;
+import net.overmy.likehunters.ashley.system.NPCSystem;
 import net.overmy.likehunters.ashley.system.PhysicalSystem;
 import net.overmy.likehunters.ashley.system.RemoveByTimeSystem;
 import net.overmy.likehunters.ashley.system.RenderSystem;
@@ -34,6 +35,7 @@ public final class AshleyWorld {
         MyMapper.init();
 
         engine.addSystem( new MyPlayerSystem() );
+        engine.addSystem( new NPCSystem() );
         engine.addSystem( new RemoveByTimeSystem() );
         engine.addSystem( new AnimationSystem() );
         engine.addSystem( new PhysicalSystem() );
@@ -45,6 +47,7 @@ public final class AshleyWorld {
 
     public static void dispose () {
         engine.removeSystem( engine.getSystem( MyPlayerSystem.class ) );
+        engine.removeSystem( engine.getSystem( NPCSystem.class ) );
         engine.removeSystem( engine.getSystem( RemoveByTimeSystem.class ) );
         engine.removeSystem( engine.getSystem( AnimationSystem.class ) );
         engine.removeSystem( engine.getSystem( PhysicalSystem.class ) );

@@ -25,7 +25,7 @@ public class MenuScreen extends BaseScreen {
 
         stage.clear();
 
-        Image image = IMG.ATTACK2_BUTTON.getImageActor( 100, 100 );
+        Image image = IMG.START_BUTTON.getImageActor( 256, 128 );
         image.addListener( new ClickListener() {
             public void clicked ( InputEvent event, float x, float y ) {
                 transitionTo( SCREEN_TYPE.LOADING_GAME, Core.FADE );

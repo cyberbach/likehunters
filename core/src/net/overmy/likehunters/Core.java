@@ -25,4 +25,7 @@ public final class Core {
 
     private Core () {
     }
+
+
+    public static float SOUND = 1.0f;
 }

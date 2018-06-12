@@ -17,10 +17,11 @@ public enum DEBUG {
     SHOW_MODEL_INFO( false ),
 
     // bullet
-    DYNAMIC_LEVELS( true ),
-    PHYSICAL_MESH( true ),
+    DYNAMIC_LEVELS( false ),
+    PHYSICAL_MESH( false ),
 
     // ashley
+    NPC_ACTIONS( true ),
     CONTACTS( false ),
     ENTITIES( true ),
     DECAL_ENTITIES( false ),;

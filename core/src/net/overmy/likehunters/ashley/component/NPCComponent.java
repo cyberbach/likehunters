@@ -16,10 +16,7 @@ public class NPCComponent extends TimeComponent {
     public ImmutableArray< NPCAction > actionArray;
 
     public int     currentAction = 0;
-    public boolean hunting       = false;
-    public boolean hurt          = false;
     public float   damage        = 5.0f;
-    public boolean die           = false;
     public Item    dropItem      = null;
 /*
 

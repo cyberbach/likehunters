@@ -4,14 +4,18 @@ import com.badlogic.ashley.core.ComponentMapper;
 
 import net.overmy.likehunters.ashley.component.AnimationComponent;
 import net.overmy.likehunters.ashley.component.BoundingBoxComponent;
+import net.overmy.likehunters.ashley.component.CharacterStateComponent;
 import net.overmy.likehunters.ashley.component.GroundedComponent;
 import net.overmy.likehunters.ashley.component.LevelIDComponent;
 import net.overmy.likehunters.ashley.component.ModelComponent;
 import net.overmy.likehunters.ashley.component.MyPlayerComponent;
+import net.overmy.likehunters.ashley.component.NPCComponent;
 import net.overmy.likehunters.ashley.component.OutOfCameraComponent;
 import net.overmy.likehunters.ashley.component.PhysicalBVHComponent;
 import net.overmy.likehunters.ashley.component.PhysicalComponent;
 import net.overmy.likehunters.ashley.component.RemoveByTimeComponent;
+import net.overmy.likehunters.ashley.component.SkipScriptComponent;
+import net.overmy.likehunters.ashley.component.SoundWalkComponent;
 import net.overmy.likehunters.ashley.component.TypeOfEntityComponent;
 
 /*
@@ -19,17 +23,21 @@ import net.overmy.likehunters.ashley.component.TypeOfEntityComponent;
         Contact me → http://vk.com/id17317
 */
 public final class MyMapper {
-    public static ComponentMapper< RemoveByTimeComponent > REMOVE_BY_TIME = null;
-    public static ComponentMapper< BoundingBoxComponent >  BOUNDS         = null;
-    public static ComponentMapper< ModelComponent >        MODEL          = null;
-    public static ComponentMapper< OutOfCameraComponent >  OUT_OF_CAMERA  = null;
-    public static ComponentMapper< PhysicalComponent >     PHYSICAL       = null;
-    public static ComponentMapper< PhysicalBVHComponent >  BVH_PHYSICAL   = null;
-    public static ComponentMapper< TypeOfEntityComponent > TYPE           = null;
-    public static ComponentMapper< AnimationComponent >    ANIMATION      = null;
-    public static ComponentMapper< MyPlayerComponent >     MY_PLAYER      = null;
-    public static ComponentMapper< GroundedComponent >     GROUNDED       = null;
-    public static ComponentMapper< LevelIDComponent >      LEVEL_ID       = null;
+    public static ComponentMapper< RemoveByTimeComponent >   REMOVE_BY_TIME = null;
+    public static ComponentMapper< BoundingBoxComponent >    BOUNDS         = null;
+    public static ComponentMapper< ModelComponent >          MODEL          = null;
+    public static ComponentMapper< OutOfCameraComponent >    OUT_OF_CAMERA  = null;
+    public static ComponentMapper< PhysicalComponent >       PHYSICAL       = null;
+    public static ComponentMapper< PhysicalBVHComponent >    BVH_PHYSICAL   = null;
+    public static ComponentMapper< TypeOfEntityComponent >   TYPE           = null;
+    public static ComponentMapper< AnimationComponent >      ANIMATION      = null;
+    public static ComponentMapper< MyPlayerComponent >       MY_PLAYER      = null;
+    public static ComponentMapper< GroundedComponent >       GROUNDED       = null;
+    public static ComponentMapper< LevelIDComponent >        LEVEL_ID       = null;
+    public static ComponentMapper< NPCComponent >            NPC            = null;
+    public static ComponentMapper< SoundWalkComponent >      WALK_SOUND     = null;
+    public static ComponentMapper< SkipScriptComponent >     SKIP           = null;
+    public static ComponentMapper< CharacterStateComponent > STATE          = null;
 
 
     private MyMapper () {
@@ -48,6 +56,10 @@ public final class MyMapper {
         MY_PLAYER = ComponentMapper.getFor( MyPlayerComponent.class );
         GROUNDED = ComponentMapper.getFor( GroundedComponent.class );
         LEVEL_ID = ComponentMapper.getFor( LevelIDComponent.class );
+        NPC = ComponentMapper.getFor( NPCComponent.class );
+        WALK_SOUND = ComponentMapper.getFor( SoundWalkComponent.class );
+        SKIP = ComponentMapper.getFor( SkipScriptComponent.class );
+        STATE = ComponentMapper.getFor( CharacterStateComponent.class );
     }
 
 
@@ -63,5 +75,9 @@ public final class MyMapper {
         MY_PLAYER = null;
         GROUNDED = null;
         LEVEL_ID = null;
+        NPC = null;
+        WALK_SOUND = null;
+        SKIP = null;
+        STATE = null;
     }
 }

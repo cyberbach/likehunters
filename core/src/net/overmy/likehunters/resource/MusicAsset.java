@@ -9,7 +9,7 @@ import net.overmy.likehunters.DEBUG;
         Created by Andrey Mikheev on 05.06.2018
         Contact me → http://vk.com/id17317
 */
-public enum MusicAsset {
+public enum MusicAsset implements Asset {
     Main( "ambient.ogg" );
 
     private static float        volume  = 0.0f;

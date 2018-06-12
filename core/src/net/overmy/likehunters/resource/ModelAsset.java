@@ -17,7 +17,7 @@ import net.overmy.likehunters.DEBUG;
         Created by Andrey Mikheev on 05.06.2018
         Contact me → http://vk.com/id17317
 */
-public enum ModelAsset {
+public enum ModelAsset implements Asset {
     Level0,
     Level1,
     Level2,
@@ -258,7 +258,6 @@ public enum ModelAsset {
 
             instance = getInstance();
             updateMaterials( instance );
-            /* calculateBoundingBox();*/
         }
     }
 

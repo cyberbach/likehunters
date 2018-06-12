@@ -9,6 +9,7 @@ import net.overmy.likehunters.ashley.AshleyWorld;
 import net.overmy.likehunters.ashley.EntityBuilder;
 import net.overmy.likehunters.ashley.component.RemoveByTimeComponent;
 import net.overmy.likehunters.logic.objects.GameObject;
+import net.overmy.likehunters.resource.Asset;
 import net.overmy.likehunters.resource.Assets;
 import net.overmy.likehunters.resource.ModelAsset;
 import net.overmy.likehunters.resource.Settings;
@@ -65,7 +66,7 @@ public final class DynamicLevels {
 
     public static void init () {
         // FIXME
-        current = Settings.START_LOCATION.getInteger();
+        current = 0;//Settings.START_LOCATION.getInteger();
 
         currentConnections = null;
         previousConnections = null;
@@ -118,14 +119,15 @@ public final class DynamicLevels {
                 Level level = levels.get( p );
                 if ( level.objects != null ) {
                     for ( GameObject object : level.objects ) {
-                        ModelAsset assetOfObject = object.getModelAsset();
-                        if ( !isModelInAnyCurrentConnections( assetOfObject ) ) {
-                            if ( assetOfObject != null ) {
-                                if ( loadingNotInDynamicLevels( assetOfObject ) ) {
-                                    if ( DEBUG.DYNAMIC_LEVELS.get() ) {
-                                        Gdx.app.debug( "unload object", "" + assetOfObject );
+                        if ( object.getAssets() != null ) {
+                            for ( Asset asset : object.getAssets() ) {
+                                if ( !isModelInAnyCurrentConnections( asset ) ) {
+                                    if ( asset != null ) {
+                                        if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+                                            Gdx.app.debug( "unload object", "" + asset );
+                                        }
+                                        asset.unload();
                                     }
-                                    assetOfObject.unload();
                                 }
                             }
                         }
@@ -147,24 +149,27 @@ public final class DynamicLevels {
     }
 
 
-    private static boolean isModelInAnyCurrentConnections ( ModelAsset models ) {
+    private static boolean isModelInAnyCurrentConnections ( Asset someAsset ) {
         for ( int i : currentConnections ) {
             Level level = levels.get( i );
             if ( level.objects != null ) {
                 for ( GameObject object : level.objects ) {
-                    ModelAsset assetOfObject = object.getModelAsset();
-                    if ( assetOfObject == models ) {
-                        if ( DEBUG.DYNAMIC_LEVELS.get() ) {
-                            Gdx.app.debug( "" + models, "in current set" );
+                    if ( object.getAssets() != null ) {
+                        for ( Asset asset : object.getAssets() ) {
+                            if ( asset == someAsset ) {
+                                if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+                                    Gdx.app.debug( "" + someAsset, "in current set" );
+                                }
+                                return true;
+                            }
                         }
-                        return true;
                     }
                 }
             }
         }
 
         if ( DEBUG.DYNAMIC_LEVELS.get() ) {
-            Gdx.app.debug( "" + models, "NOT in current set" );
+            Gdx.app.debug( "" + someAsset, "NOT in current set" );
         }
         return false;
     }
@@ -206,11 +211,11 @@ public final class DynamicLevels {
             if ( level.objects != null ) {
                 // Загружаем объекты на уровне
                 for ( GameObject object : level.objects ) {
-                    ModelAsset assetOfObject = object.getModelAsset();
-                    if ( assetOfObject != null ) {
-                        if ( loadingNotInDynamicLevels( assetOfObject ) ) {
-                            //Gdx.app.debug( "loadingNotInDynamicLevels", "assetOfObject = "+assetOfObject );
-                            assetOfObject.load();
+                    if ( object.getAssets() != null ) {
+                        for ( Asset asset : object.getAssets() )
+                        //Gdx.app.debug( "loadingNotInDynamicLevels", "assetOfObject = "+assetOfObject );
+                        {
+                            asset.load();
                         }
                     }
                 }
@@ -240,33 +245,20 @@ public final class DynamicLevels {
 
             if ( level.objects != null ) {
                 for ( GameObject object : level.objects ) {
-                    ModelAsset assetOfObject = object.getModelAsset();
-                    if ( assetOfObject != null ) {
-                        if ( loadingNotInDynamicLevels( assetOfObject ) ) {
-                            if ( object.getEntity() == null ) {
-                                assetOfObject.build();
+                    if ( object.getAssets() != null ) {
+                        for ( Asset asset : object.getAssets() ) {
+                            if ( asset != null ) {
+                                if ( object.getEntity() == null ) {
+                                    asset.build();
+                                }
                             }
+
+                            object.buildEntity();
                         }
                     }
-
-                    object.buildEntity();
                 }
             }
         }
-    }
-
-
-    private static boolean loadingNotInDynamicLevels ( ModelAsset asset ) {
-        /*
-        boolean broom = ModelAsset.BROOM_WEAPON.equals( asset );
-        boolean rake = ModelAsset.RAKE_WEAPON.equals( asset );
-        boolean kalash = ModelAsset.KALASH_WEAPON.equals( asset );
-        boolean fence = ModelAsset.FENCE_WEAPON.equals( asset );
-        boolean pillow = ModelAsset.PILLOW_WEAPON.equals( asset );
-        boolean gun = ModelAsset.GUN_WEAPON.equals( asset );
-        return !( broom || rake || kalash || fence || pillow || gun );
-        */
-        return true;
     }
 
 

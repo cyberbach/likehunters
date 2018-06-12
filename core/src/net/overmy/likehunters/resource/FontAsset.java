@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
         Created by Andrey Mikheev on 04.06.2018
         Contact me → http://vk.com/id17317
 */
-public enum FontAsset {
+public enum FontAsset implements Asset {
     MENU_TITLE( "bb.otf", 32, 1 ),;
 
     private static AssetManager manager = null;
@@ -55,48 +55,61 @@ public enum FontAsset {
     }
 
 
-    public static void build () {
-        final float scale = Gdx.graphics.getHeight() / 480.0f;
-
+    public static void buildAll () {
         for ( int i = 0; i < FontAsset.values().length; i++ ) {
-            FreeTypeFontParameter myFontParameters = new FreeTypeFontParameter();
-            myFontParameters.borderWidth = FontAsset.values()[ i ].borderSize;
-            myFontParameters.borderColor = FontAsset.values()[ i ].borderColor;
-            myFontParameters.characters = createChars();
-
-            FreeTypeFontGenerator myFontGenerator = manager.get( FontAsset.values()[ i ].path,
-                                                                 FreeTypeFontGenerator.class );
-            myFontParameters.size = (int) ( FontAsset.values()[ i ].size * scale );
-            myFontParameters.color = FontAsset.values()[ i ].color;
-            FontAsset.values()[ i ].font = myFontGenerator.generateFont( myFontParameters );
+            FontAsset.values()[ i ].build();
         }
     }
 
 
-    public static void load () {
+    public static void loadAll () {
         for ( int i = 0; i < FontAsset.values().length; i++ ) {
-            String loadPath = FontAsset.values()[ i ].path;
-            if ( !manager.isLoaded( loadPath ) ) {
-                manager.load( loadPath, FreeTypeFontGenerator.class );
-            }
+            FontAsset.values()[ i ].load();
         }
     }
 
 
-    public static void unload () {
+    public static void unloadAll () {
         for ( int i = 0; i < FontAsset.values().length; i++ ) {
-            if ( FontAsset.values()[ i ].font != null ) {
-                FontAsset.values()[ i ].font.dispose();
-                FontAsset.values()[ i ].font = null;
-
-                String unloadPath = FontAsset.values()[ i ].path;
-                if ( manager.isLoaded( unloadPath ) ) {
-                    manager.unload( unloadPath );
-                }
-            }
+            FontAsset.values()[ i ].unload();
         }
 
         manager = null;
+    }
+
+
+    public void build () {
+        final float scale = Gdx.graphics.getHeight() / 480.0f;
+
+        FreeTypeFontParameter myFontParameters = new FreeTypeFontParameter();
+        myFontParameters.borderWidth = this.borderSize;
+        myFontParameters.borderColor = this.borderColor;
+        myFontParameters.characters = createChars();
+
+        FreeTypeFontGenerator myFontGenerator = manager.get( this.path,
+                                                             FreeTypeFontGenerator.class );
+        myFontParameters.size = (int) ( this.size * scale );
+        myFontParameters.color = this.color;
+        this.font = myFontGenerator.generateFont( myFontParameters );
+    }
+
+
+    public void load () {
+        if ( !manager.isLoaded( this.path ) ) {
+            manager.load( this.path, FreeTypeFontGenerator.class );
+        }
+    }
+
+
+    public void unload () {
+        if ( this.font != null ) {
+            this.font.dispose();
+            this.font = null;
+
+            if ( manager.isLoaded( this.path ) ) {
+                manager.unload( this.path );
+            }
+        }
     }
 
 

@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g3d.model.Animation;
 import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
-import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.utils.Array;
 
 import net.overmy.likehunters.Core;
@@ -24,15 +23,17 @@ import net.overmy.likehunters.ashley.component.LifeComponent;
 import net.overmy.likehunters.ashley.component.ModelComponent;
 import net.overmy.likehunters.ashley.component.MyPlayerComponent;
 import net.overmy.likehunters.ashley.component.NPCComponent;
+import net.overmy.likehunters.ashley.component.CharacterStateComponent;
 import net.overmy.likehunters.ashley.component.PhysicalComponent;
 import net.overmy.likehunters.ashley.component.RemoveByTimeComponent;
+import net.overmy.likehunters.ashley.component.SoundWalkComponent;
 import net.overmy.likehunters.ashley.component.TYPE_OF_ENTITY;
 import net.overmy.likehunters.ashley.component.TypeOfEntityComponent;
-import net.overmy.likehunters.ashley.component.WalkSoundComponent;
 import net.overmy.likehunters.bullet.BulletWorld;
 import net.overmy.likehunters.bullet.PhysicalBuilder;
 import net.overmy.likehunters.logic.Item;
 import net.overmy.likehunters.logic.NPCAction;
+import net.overmy.likehunters.logic.CHARACTER_STATE;
 import net.overmy.likehunters.resource.ModelAsset;
 import net.overmy.likehunters.resource.SoundAsset;
 
@@ -42,7 +43,7 @@ import net.overmy.likehunters.resource.SoundAsset;
 */
 public class EntityBuilder {
 
-    private static void initSound ( WalkSoundComponent walkSoundComponent, SoundAsset asset ) {
+    private static void initSound ( SoundWalkComponent walkSoundComponent, SoundAsset asset ) {
         walkSoundComponent.walk = asset.get();
         //walkSoundComponent.id = walkSoundComponent.walk.loop( 0 );
     }
@@ -108,6 +109,7 @@ public class EntityBuilder {
         entity.add( new MyPlayerComponent() );
         entity.add( physicalBuilder.buildPhysicalComponent() );
         entity.add( new GroundedComponent() );
+        entity.add( CharacterState() );
         //entity.add( RemoveByTime(5) );
         return entity;
     }
@@ -116,13 +118,17 @@ public class EntityBuilder {
 
 
     public Entity createNPC ( Vector3 position, ModelAsset modelAsset,
-                              ImmutableArray< NPCAction > actionArray ) {
+                              ImmutableArray< NPCAction > actionArray,
+                              SoundAsset walkSoundAsset ) {
 
         ModelInstance modelInstance = modelAsset.get();
 
-        WalkSoundComponent walkSound = new WalkSoundComponent();
+        SoundWalkComponent walkSound = new SoundWalkComponent();
+        walkSound.walk = walkSoundAsset.get();
 
         PhysicalBuilder physicalBuilderNPC;
+
+        // FIXME refactor
 
         if ( modelAsset.equals( ModelAsset.SPIDER1 ) ) {
             physicalBuilderNPC = new PhysicalBuilder()
@@ -136,7 +142,7 @@ public class EntityBuilder {
                     .setCallbackFilter( BulletWorld.ENEMY_FILTER )
                     .disableRotation()
                     .disableDeactivation();
-            initSound( walkSound, SoundAsset.NPC_STEP );
+            //initSound( walkSound, SoundAsset.NPC_STEP );
         } else if ( modelAsset.equals( ModelAsset.SPIDER1 ) ) {
             physicalBuilderNPC = new PhysicalBuilder()
                     .setModelInstance( modelInstance )
@@ -149,7 +155,7 @@ public class EntityBuilder {
                     .setCallbackFilter( BulletWorld.ENEMY_FILTER )
                     .disableRotation()
                     .disableDeactivation();
-            initSound( walkSound, SoundAsset.NPC_STEP );
+            //initSound( walkSound, SoundAsset.NPC_STEP );
         } else if ( modelAsset.equals( ModelAsset.MONSTER1 ) ) {
             physicalBuilderNPC = new PhysicalBuilder()
                     .setModelInstance( modelInstance )
@@ -162,7 +168,7 @@ public class EntityBuilder {
                     .setCallbackFilter( BulletWorld.ENEMY_FILTER )
                     .disableRotation()
                     .disableDeactivation();
-            initSound( walkSound, SoundAsset.NPC_STEP );
+            //initSound( walkSound, SoundAsset.NPC_STEP );
         } else if ( modelAsset.equals( ModelAsset.DRAKON1 ) ) {
             physicalBuilderNPC = new PhysicalBuilder()
                     .setModelInstance( modelInstance )
@@ -175,7 +181,7 @@ public class EntityBuilder {
                     .setCallbackFilter( BulletWorld.ENEMY_FILTER )
                     .disableRotation()
                     .disableDeactivation();
-            initSound( walkSound, SoundAsset.PLAYER_DAMAGE );
+            //initSound( walkSound, SoundAsset.PLAYER_DAMAGE );
         } else {
             physicalBuilderNPC = new PhysicalBuilder()
                     .setModelInstance( modelInstance )
@@ -188,7 +194,7 @@ public class EntityBuilder {
                     .setCallbackFilter( BulletWorld.ENEMY_FILTER )
                     .disableRotation()
                     .disableDeactivation();
-            initSound( walkSound, SoundAsset.NPC_STEP );
+            //initSound( walkSound, SoundAsset.NPC_STEP );
         }
 
         PhysicalComponent physicalComponent = physicalBuilderNPC.buildPhysicalComponent();
@@ -204,6 +210,7 @@ public class EntityBuilder {
         entity.add( NPC( actionArray, 5, null ) );
         entity.add( physicalComponent );
         entity.add( walkSound );
+        entity.add( CharacterState() );
 
         return entity;
     }
@@ -226,6 +233,14 @@ public class EntityBuilder {
         lifeComponent.decal = Decal.newDecal( decalSize, decalSize, regionRed, false );
 
         return lifeComponent;
+    }
+
+
+    private CharacterStateComponent CharacterState () {
+        CharacterStateComponent npcStateComponent = new CharacterStateComponent();
+        npcStateComponent.state = CHARACTER_STATE.IDLE;
+        npcStateComponent.nextState = CHARACTER_STATE.IDLE;
+        return npcStateComponent;
     }
 
 

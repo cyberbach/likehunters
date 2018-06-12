@@ -7,12 +7,12 @@ import com.badlogic.gdx.audio.Sound;
         Created by Andrey Mikheev on 03.06.2018
         Contact me → http://vk.com/id17317
 */
-public class WalkSoundComponent implements Component {
+public class SoundWalkComponent implements Component {
     public Sound walk;
     public long id = 0;
 /*
 
-    public WalkSoundComponent ( Sound walk ) {
+    public SoundWalkComponent ( Sound walk ) {
         this.walk = walk;
         id = this.walk.play();
         this.walk.setVolume( id, 0 );

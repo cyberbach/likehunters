@@ -1,12 +1,14 @@
 package net.overmy.likehunters.logic.objects;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
 import net.overmy.likehunters.ashley.component.RemoveByTimeComponent;
 import net.overmy.likehunters.logic.collectable.TRIGGER;
 import net.overmy.likehunters.logic.collectable.TriggerCollectable;
+import net.overmy.likehunters.resource.Asset;
 import net.overmy.likehunters.resource.ModelAsset;
 
 
@@ -33,7 +35,7 @@ public class TriggerObject implements GameObject {
 
 
     @Override
-    public ModelAsset getModelAsset () {
+    public ImmutableArray< Asset > getAssets () {
         return null;
     }
 

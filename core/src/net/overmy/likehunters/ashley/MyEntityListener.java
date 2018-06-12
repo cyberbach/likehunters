@@ -10,9 +10,11 @@ import com.badlogic.gdx.physics.bullet.collision.btTriangleIndexVertexArray;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 
+import net.overmy.likehunters.Core;
 import net.overmy.likehunters.DEBUG;
 import net.overmy.likehunters.ashley.component.PhysicalBVHComponent;
 import net.overmy.likehunters.ashley.component.PhysicalComponent;
+import net.overmy.likehunters.ashley.component.SoundWalkComponent;
 import net.overmy.likehunters.bullet.BulletWorld;
 import net.overmy.likehunters.screen.MyCamera;
 import net.overmy.likehunters.screen.MyCameraPhysics;
@@ -40,6 +42,11 @@ public class MyEntityListener implements EntityListener {
             }
         }
 
+        if ( MyMapper.WALK_SOUND.has( entity ) ) {
+            SoundWalkComponent soundWalkComponent = MyMapper.WALK_SOUND.get( entity );
+            soundWalkComponent.id = soundWalkComponent.walk.loop( 0.0f );
+        }
+
         if ( MyMapper.MY_PLAYER.has( entity ) ) {
             // здесь добавление тела к камере
 
@@ -62,7 +69,7 @@ public class MyEntityListener implements EntityListener {
 
 /*
         if ( MyMapper.WALK_SOUND.has( entity ) ) {
-            WalkSoundComponent walkSoundComponent = MyMapper.WALK_SOUND.get( entity );
+            SoundWalkComponent walkSoundComponent = MyMapper.WALK_SOUND.get( entity );
             walkSoundComponent.id = walkSoundComponent.walk.loop( 0 );
         }
 
@@ -196,7 +203,7 @@ public class MyEntityListener implements EntityListener {
         }
 /*
         if ( MyMapper.WALK_SOUND.has( entity ) ) {
-            WalkSoundComponent walkSoundComponent = MyMapper.WALK_SOUND.get( entity );
+            SoundWalkComponent walkSoundComponent = MyMapper.WALK_SOUND.get( entity );
             walkSoundComponent.walk.stop( walkSoundComponent.id );
         }
 

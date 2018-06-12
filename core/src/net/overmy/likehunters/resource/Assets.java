@@ -45,23 +45,21 @@ public class Assets {
     }
 
     public static void load () {
-        FontAsset.load();
+        FontAsset.loadAll();
         IMG.load();
         MusicAsset.Main.load();
-        SoundAsset.load();
     }
 
 
     public static void build () {
-        FontAsset.build();
+        FontAsset.buildAll();
         IMG.build();
         MusicAsset.Main.build();
-        SoundAsset.build();
     }
 
 
     public static void unload () {
-        FontAsset.unload();
+        FontAsset.unloadAll();
         IMG.unload();
         ModelAsset.unloadAll();
         MusicAsset.unloadAll();

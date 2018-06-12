@@ -7,7 +7,7 @@ import com.badlogic.gdx.audio.Sound;
         Created by Andrey Mikheev on 05.06.2018
         Contact me → http://vk.com/id17317
 */
-public enum SoundAsset {
+public enum SoundAsset implements Asset {
     A1( "a1" ),
     A2( "a2" ),
     A3( "a3" ),
@@ -62,24 +62,45 @@ public enum SoundAsset {
 */
 
 
-    public static void build () {
-        /*for ( int i = 0; i < SoundAsset.values().length; i++ ) {
-            SoundAsset.values()[ i ].snd = manager.get( SoundAsset.values()[ i ].path,
-                                                        Sound.class );
-        }*/
+    public static void unloadAll () {
+        for ( int i = 0; i < SoundAsset.values().length; i++ ) {
+            SoundAsset.values()[ i ].unload();
+        }
     }
 
-
-    public static void load () {
+/*
+    public static void buildAll () {
         for ( int i = 0; i < SoundAsset.values().length; i++ ) {
-            manager.load( SoundAsset.values()[ i ].path, Sound.class );
+            SoundAsset.values()[ i ].snd = manager.get( SoundAsset.values()[ i ].path,
+                                                        Sound.class );
+        }
+    }
+*/
+
+
+    public void build () {
+    }
+
+/*
+
+    public static void loadAll () {
+        for ( int i = 0; i < SoundAsset.values().length; i++ ) {
+            SoundAsset.values()[ i ].load();
+        }
+    }
+*/
+
+
+    public void load () {
+        if ( !manager.isLoaded( path ) ) {
+            manager.load( this.path, Sound.class );
         }
     }
 
 
-    public static void unloadAll () {
-        for ( int i = 0; i < SoundAsset.values().length; i++ ) {
-            manager.unload( SoundAsset.values()[ i ].path );
+    public void unload () {
+        if ( manager.isLoaded( path ) ) {
+            manager.unload( this.path );
         }
     }
 
