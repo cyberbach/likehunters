@@ -78,7 +78,7 @@ public final class BulletWorld {
 
         dynamicsWorld.setGravity( new Vector3( 0, -20f, 0 ) );
 
-        if ( DEBUG.PHYSICAL_MESH.get() ) {
+        if ( DEBUG.PHYSICAL_MESH ) {
             debugDrawer = new DebugDrawer();
             dynamicsWorld.setDebugDrawer( debugDrawer );
             int mode = DebugDrawModes.DBG_MAX_DEBUG_DRAW_MODE;

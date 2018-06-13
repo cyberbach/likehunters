@@ -49,7 +49,7 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void draw ( float delta ) {
-        if ( DEBUG.PHYSICAL_MESH.get() ) {
+        if ( DEBUG.PHYSICAL_MESH ) {
             BulletWorld.drawDebug();
         }
     }

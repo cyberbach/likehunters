@@ -37,7 +37,7 @@ public class LoadingScreen extends BaseScreen {
 
         this.screenAfterLoad = nextScreen;
 
-        if ( DEBUG.BASE_SCREEN.get() ) {
+        if ( DEBUG.BASE_SCREEN ) {
             Gdx.app.debug( "LoadingScreen", "loading()" );
         }
 
@@ -97,7 +97,7 @@ public class LoadingScreen extends BaseScreen {
 
 
     private void build () {
-        if ( DEBUG.BASE_SCREEN.get() ) {
+        if ( DEBUG.BASE_SCREEN ) {
             Gdx.app.debug( "LoadingScreen", "build()" );
         }
         switch ( screenAfterLoad ) {
@@ -147,7 +147,7 @@ public class LoadingScreen extends BaseScreen {
         }
 
         float progress = Assets.getManager().getProgress();
-        if ( DEBUG.BASE_SCREEN.get() && !buildFinished ) {
+        if ( DEBUG.BASE_SCREEN && !buildFinished ) {
             Gdx.app.debug( "LoadingScreen", "progress=" + progress );
         }
         loadingBar.setScaleX( progress );

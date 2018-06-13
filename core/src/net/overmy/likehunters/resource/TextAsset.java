@@ -51,10 +51,10 @@ public enum TextAsset {
     public static void init () {
         String defaultLocale = java.util.Locale.getDefault().toString();
         String clsName = TextAsset.class.getSimpleName();
-        if ( DEBUG.SETTINGS.get() ) {
+        if ( DEBUG.SETTINGS ) {
             Gdx.app.debug( "" + clsName + " locale", "" + defaultLocale );
         }
-        russianLocale = !DEBUG.ENABLE_ENGLISH_TEXT.get() && "ru_RU".equals( defaultLocale );
+        russianLocale = !DEBUG.ENGLISH_TEXT && "ru_RU".equals( defaultLocale );
     }
 
 

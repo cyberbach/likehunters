@@ -90,6 +90,7 @@ public class MyPlayerSystem extends IteratingSystem {
         bodyTransform.rotate( Vector3.Y, capsuleAngle );
         body.proceedToTransform( bodyTransform );
 
+        // save position and angle to CORE singleton
         Core.playerPosition.set( position );
         Core.playerAngle = capsuleAngle;
     }

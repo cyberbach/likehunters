@@ -133,7 +133,7 @@ public class ObjectBuilder {
             return;
         }
 
-        if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+        if ( DEBUG.DYNAMIC_LEVELS ) {
             Gdx.app.debug( "Need to build OBJECT", "" + this.type );
         }
 /*

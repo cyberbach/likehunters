@@ -107,7 +107,7 @@ public class BaseScreen implements Screen {
 
 
     void transitionTo ( SCREEN_TYPE screen, float time ) {
-        if ( DEBUG.BASE_SCREEN.get() ) {
+        if ( DEBUG.BASE_SCREEN ) {
             Gdx.app.debug( "BaseScreen, transitionTo", "screen=" + screen );
         }
 
@@ -125,7 +125,7 @@ public class BaseScreen implements Screen {
 
 
     private void switchCurrentScreen () {
-        if ( DEBUG.BASE_SCREEN.get() ) {
+        if ( DEBUG.BASE_SCREEN ) {
             Gdx.app.debug( "BaseScreen", "switchCurrentScreen" );
         }
 

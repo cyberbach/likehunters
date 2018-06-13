@@ -1,50 +1,42 @@
 package net.overmy.likehunters;
 
 /*
-        Created by Andrey Mikheev on 04.06.2018
+        Created by Andrey Mikheev on 13.06.2018
         Contact me → http://vk.com/id17317
 */
-public enum DEBUG {
-    WINDOWS( true ),
-    SETTINGS( false ),
-    ENABLE_ENGLISH_TEXT( false ),
+public final class DEBUG {
+    public static boolean WINDOWS      = true;
+    public static boolean SETTINGS     = false;
+    public static boolean ENGLISH_TEXT = false;
 
     // 2d screen info
-    BASE_SCREEN( false ),
-    STAGE( false ),
+    public static boolean BASE_SCREEN = false;
+    public static boolean STAGE       = false;
 
     // 3d loading stuff
-    SHOW_MODEL_INFO( false ),
+    public static boolean SHOW_MODEL_INFO = false;
 
     // bullet
-    DYNAMIC_LEVELS( false ),
-    PHYSICAL_MESH( false ),
+    public static boolean DYNAMIC_LEVELS = false;
+    public static boolean PHYSICAL_MESH  = false;
 
     // ashley
-    NPC_ACTIONS( true ),
-    CONTACTS( false ),
-    ENTITIES( true ),
-    DECAL_ENTITIES( false ),;
-
-    private final boolean value;
+    public static boolean NPC_ACTIONS    = true;
+    public static boolean CONTACTS       = false;
+    public static boolean ENTITIES       = true;
+    public static boolean DECAL_ENTITIES = false;
 
 
-    DEBUG ( boolean value ) {
-        this.value = value;
+    private DEBUG () {
     }
 
 
     public static boolean anything () {
-        for ( DEBUG d : DEBUG.values() ) {
-            if ( d.get() ) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    public boolean get () {
-        return value;
+        boolean sectionMain = WINDOWS || SETTINGS || ENGLISH_TEXT;
+        boolean section2d = BASE_SCREEN || STAGE;
+        boolean section3d = SHOW_MODEL_INFO;
+        boolean sectionBullet = DYNAMIC_LEVELS || PHYSICAL_MESH;
+        boolean sectionAshley = NPC_ACTIONS || CONTACTS || ENTITIES || DECAL_ENTITIES;
+        return sectionMain || section2d || section3d || sectionBullet || sectionAshley;
     }
 }

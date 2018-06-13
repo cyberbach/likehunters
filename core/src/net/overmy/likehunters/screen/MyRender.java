@@ -65,7 +65,7 @@ public final class MyRender {
         Viewport viewport = new FitViewport( Core.WIDTH, Core.HEIGHT, orthographicCamera );
 
         stage = new Stage( viewport, spriteBatch );
-        stage.setDebugAll( DEBUG.STAGE.get() );
+        stage.setDebugAll( DEBUG.STAGE );
 
 
         MyCamera.init();

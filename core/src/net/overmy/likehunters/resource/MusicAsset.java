@@ -33,7 +33,7 @@ public enum MusicAsset implements Asset {
     public static void setVolume ( float fvolume ) {
         volume = fvolume;
 
-        if ( DEBUG.WINDOWS.get() ) {
+        if ( DEBUG.WINDOWS ) {
             return;
         }
 
@@ -56,7 +56,7 @@ public enum MusicAsset implements Asset {
 
 
     public static void stopAll () {
-        if ( DEBUG.WINDOWS.get() ) {
+        if ( DEBUG.WINDOWS ) {
             return;
         }
 
@@ -69,7 +69,7 @@ public enum MusicAsset implements Asset {
 
 
     public static void unloadAll () {
-        if ( DEBUG.WINDOWS.get() ) {
+        if ( DEBUG.WINDOWS ) {
             return;
         }
 
@@ -84,7 +84,7 @@ public enum MusicAsset implements Asset {
 
 
     public void build () {
-        if ( DEBUG.WINDOWS.get() ) {
+        if ( DEBUG.WINDOWS ) {
             return;
         }
 
@@ -93,7 +93,7 @@ public enum MusicAsset implements Asset {
 
 
     public void load () {
-        if ( DEBUG.WINDOWS.get() ) {
+        if ( DEBUG.WINDOWS ) {
             return;
         }
 
@@ -102,7 +102,7 @@ public enum MusicAsset implements Asset {
 
 
     public void unload () {
-        if ( DEBUG.WINDOWS.get() ) {
+        if ( DEBUG.WINDOWS ) {
             return;
         }
 
@@ -116,7 +116,7 @@ public enum MusicAsset implements Asset {
 
 
     public void play ( boolean loop ) {
-        if ( DEBUG.WINDOWS.get() || volume == 0.0f ) {
+        if ( DEBUG.WINDOWS || volume == 0.0f ) {
             return;
         }
 
@@ -152,7 +152,7 @@ public enum MusicAsset implements Asset {
 
 
     public void stopLoop () {
-        if ( DEBUG.WINDOWS.get() ) {
+        if ( DEBUG.WINDOWS ) {
             return;
         }
 

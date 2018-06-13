@@ -64,7 +64,7 @@ public final class AshleyWorld {
     public static void update ( float delta ) {
         engine.update( delta );
 
-        if ( DEBUG.CONTACTS.get() ) {
+        if ( DEBUG.CONTACTS ) {
             Gdx.app.debug( "AshleyWorld ================================== update",
                            "tick ===============================" );
         }

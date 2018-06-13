@@ -37,7 +37,7 @@ public class WorldContactListener extends ContactListener {
 
     @Override
     public void onContactProcessed ( int userValue1, boolean m1, int userValue2, boolean m2 ) {
-        if ( DEBUG.CONTACTS.get() ) {
+        if ( DEBUG.CONTACTS ) {
             stringBuilder.setLength( 0 );
             stringBuilder.append( userValue1 );
             stringBuilder.append( m1 ? " (match) " : " (not match)" );
@@ -48,7 +48,7 @@ public class WorldContactListener extends ContactListener {
         }
 
         if ( !m1 || !m2 ) {
-            if ( DEBUG.CONTACTS.get() ) {
+            if ( DEBUG.CONTACTS ) {
                 Gdx.app.debug( "onContactProcessed", "drop" );
             }
             return;
@@ -86,7 +86,7 @@ public class WorldContactListener extends ContactListener {
 
     @Override
     public void onContactEnded ( int userValue1, boolean m1, int userValue2, boolean m2 ) {
-        if ( DEBUG.CONTACTS.get() ) {
+        if ( DEBUG.CONTACTS ) {
             stringBuilder.setLength( 0 );
             stringBuilder.append( userValue1 );
             stringBuilder.append( m1 ? " (match) " : " (not match)" );
@@ -97,7 +97,7 @@ public class WorldContactListener extends ContactListener {
         }
 
         if ( !m1 || !m2 ) {
-            if ( DEBUG.CONTACTS.get() ) {
+            if ( DEBUG.CONTACTS ) {
                 Gdx.app.debug( "onContactProcessed", "drop" );
             }
             return;
@@ -135,7 +135,7 @@ public class WorldContactListener extends ContactListener {
         TYPE_OF_ENTITY type1 = MyMapper.TYPE.get( entity01 ).type;
         TYPE_OF_ENTITY type2 = MyMapper.TYPE.get( entity02 ).type;
 
-        if ( DEBUG.CONTACTS.get() ) {
+        if ( DEBUG.CONTACTS ) {
             stringBuilder.setLength( 0 );
             stringBuilder.append( type1 );
             stringBuilder.append( " -> " );
@@ -155,7 +155,7 @@ public class WorldContactListener extends ContactListener {
 
             int lastID = DynamicLevels.getCurrent();
             int newID = levelComponent.id;
-            if ( DEBUG.CONTACTS.get() ) {
+            if ( DEBUG.CONTACTS ) {
                 Gdx.app.debug( "Before reload", "new = " + newID + " last = " + lastID );
             }
             if ( lastID != newID ) {
@@ -163,7 +163,7 @@ public class WorldContactListener extends ContactListener {
             }
             if ( !MyMapper.GROUNDED.get( entity01 ).grounded ) {
                 //DynamicLevels.reload();
-                if ( DEBUG.CONTACTS.get() ) {
+                if ( DEBUG.CONTACTS ) {
                     Gdx.app.debug( "after reload", "new = " + newID );
                 }
             }
@@ -176,7 +176,7 @@ public class WorldContactListener extends ContactListener {
 
             int lastID = DynamicLevels.getCurrent();
             int newID = levelComponent.id;
-            if ( DEBUG.CONTACTS.get() ) {
+            if ( DEBUG.CONTACTS ) {
                 Gdx.app.debug( "Before reload", "new = " + newID + " last = " + lastID );
             }
             if ( lastID != newID ) {
@@ -184,7 +184,7 @@ public class WorldContactListener extends ContactListener {
             }
             if ( !MyMapper.GROUNDED.get( entity02 ).grounded ) {
                 //DynamicLevels.reload();
-                if ( DEBUG.CONTACTS.get() ) {
+                if ( DEBUG.CONTACTS ) {
                     Gdx.app.debug( "after reload", "new = " + newID );
                 }
             }
@@ -379,7 +379,7 @@ public class WorldContactListener extends ContactListener {
         TYPE_OF_ENTITY type1 = MyMapper.TYPE.get( entity01 ).type;
         TYPE_OF_ENTITY type2 = MyMapper.TYPE.get( entity02 ).type;
 
-        if ( DEBUG.CONTACTS.get() ) {
+        if ( DEBUG.CONTACTS ) {
             stringBuilder.setLength( 0 );
             stringBuilder.append( type1 );
             stringBuilder.append( " -> " );
@@ -393,7 +393,7 @@ public class WorldContactListener extends ContactListener {
         if ( contact1Player && contact2Ground ) {
             MyMapper.GROUNDED.get( entity01 ).grounded = false;
             DynamicLevels.reload();
-            if ( DEBUG.CONTACTS.get() ) {
+            if ( DEBUG.CONTACTS ) {
                 Gdx.app.debug( "=== DynamicLevels", "must RELOAD ===" );
             }
             return;
@@ -405,7 +405,7 @@ public class WorldContactListener extends ContactListener {
         if ( contact2Player && contact1Ground ) {
             MyMapper.GROUNDED.get( entity02 ).grounded = false;
             DynamicLevels.reload();
-            if ( DEBUG.CONTACTS.get() ) {
+            if ( DEBUG.CONTACTS ) {
                 Gdx.app.debug( "=== DynamicLevels", "must RELOAD ===" );
             }
             return;

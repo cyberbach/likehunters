@@ -113,6 +113,8 @@ public class NPCSystem extends IteratingSystem {
                                                 CharacterStateComponent npcState, boolean skip ) {
         if ( skip ) {
             direction.set( 0, 0 );
+            npcState.state = CHARACTER_STATE.IDLE;
+            npcState.nextState = CHARACTER_STATE.IDLE;
             return;
         }
 
@@ -129,7 +131,7 @@ public class NPCSystem extends IteratingSystem {
             npcComponent.time = npcAction.durationTime;
             npcComponent.currentAction = action;
 
-            if ( DEBUG.NPC_ACTIONS.get() ) {
+            if ( DEBUG.NPC_ACTIONS ) {
                 Gdx.app.debug( "action " + npcAction.id, "time " + npcComponent.time );
                 if ( npcComponent.actionArray.get( action ).targetPosition != null ) {
                     Gdx.app.debug( "targetPosition", "" + npcAction.targetPosition );

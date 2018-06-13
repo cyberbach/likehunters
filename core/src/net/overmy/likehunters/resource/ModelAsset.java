@@ -83,7 +83,7 @@ public enum ModelAsset implements Asset {
 
 
     private void updateMaterials ( ModelInstance instance ) {
-        if ( DEBUG.SHOW_MODEL_INFO.get() ) {
+        if ( DEBUG.SHOW_MODEL_INFO ) {
             Gdx.app.debug( "" + this.name, "updateMaterials" );
         }
 
@@ -114,11 +114,11 @@ public enum ModelAsset implements Asset {
 
     public void load () {
         if ( !manager.isLoaded( name ) ) {
-            if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+            if ( DEBUG.DYNAMIC_LEVELS ) {
                 Gdx.app.debug( "Need to load", "" + this );
             }
 
-            if ( DEBUG.SHOW_MODEL_INFO.get() ) {
+            if ( DEBUG.SHOW_MODEL_INFO ) {
                 Gdx.app.debug( "" + this.name, "load" );
             }
 
@@ -129,7 +129,7 @@ public enum ModelAsset implements Asset {
 
     public void unload () {
         if ( manager.isLoaded( name ) ) {
-            if ( DEBUG.SHOW_MODEL_INFO.get() ) {
+            if ( DEBUG.SHOW_MODEL_INFO ) {
                 Gdx.app.debug( "" + this.name, "unload" );
             }
 
@@ -142,7 +142,7 @@ public enum ModelAsset implements Asset {
 
 
     public ModelInstance get () {
-        if ( DEBUG.SHOW_MODEL_INFO.get() ) {
+        if ( DEBUG.SHOW_MODEL_INFO ) {
             Gdx.app.debug( "" + this.name, "get one more instance" );
         }
 
@@ -159,7 +159,7 @@ public enum ModelAsset implements Asset {
     private ModelInstance getInstance () {
         Model model = manager.get( name, Model.class );
 
-        if ( DEBUG.SHOW_MODEL_INFO.get() ) {
+        if ( DEBUG.SHOW_MODEL_INFO ) {
             stringBuilder.append( "nodes: " );
             stringBuilder.append( model.nodes.size );
             stringBuilder.append( " (" );
@@ -234,7 +234,7 @@ public enum ModelAsset implements Asset {
 
 
     public ModelInstance getSimple () {
-        if ( DEBUG.SHOW_MODEL_INFO.get() ) {
+        if ( DEBUG.SHOW_MODEL_INFO ) {
             Gdx.app.debug( "" + this.name, "getSimple" );
         }
 
@@ -252,7 +252,7 @@ public enum ModelAsset implements Asset {
         }
 
         if ( instance == null ) {
-            if ( DEBUG.SHOW_MODEL_INFO.get() ) {
+            if ( DEBUG.SHOW_MODEL_INFO ) {
                 Gdx.app.debug( "" + this.name, "build" );
             }
 

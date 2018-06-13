@@ -63,7 +63,7 @@ public enum Settings {
             Settings.START_LOCATION.setInteger( 0 );
         }
 
-        if ( DEBUG.SETTINGS.get() ) {
+        if ( DEBUG.SETTINGS ) {
             showDebug();
             Gdx.app.debug( "█ Settings (" + SETTINGS + ")", "loaded" );
         }
@@ -109,7 +109,7 @@ public enum Settings {
 
         prefs.flush();
 
-        if ( DEBUG.SETTINGS.get() ) {
+        if ( DEBUG.SETTINGS ) {
             showDebug();
             Gdx.app.debug( "█ Settings", "saved" );
         }

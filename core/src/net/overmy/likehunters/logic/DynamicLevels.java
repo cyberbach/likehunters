@@ -47,7 +47,7 @@ public final class DynamicLevels {
         // на выходе из этого метода GameHelper удалится из памяти
         GameHelper helper = new GameHelper();
 
-        levelArray.add( new Level( helper.toInts( "0, 1" ), objects.LEVEL0() ) );
+        levelArray.add( new Level( helper.toInts( "0" ), objects.LEVEL0() ) );/*
         levelArray.add( new Level( helper.toInts( "1, 2, 0, 3" ), objects.LEVEL1() ) );
         levelArray.add( new Level( helper.toInts( "2, 1, 4" ), objects.LEVEL2() ) );
         levelArray.add( new Level( helper.toInts( "3, 1, 4,9" ), objects.LEVEL3() ) );
@@ -58,7 +58,7 @@ public final class DynamicLevels {
         levelArray.add( new Level( helper.toInts( "8, 7, 9" ), objects.LEVEL8() ) );
         levelArray.add( new Level( helper.toInts( "9, 8, 3,10" ), objects.LEVEL9() ) );
         levelArray.add( new Level( helper.toInts( "10, 9, 11" ), objects.LEVEL10() ) );
-        levelArray.add( new Level( helper.toInts( "11, 10" ), objects.LEVEL11() ) );
+        levelArray.add( new Level( helper.toInts( "11, 10" ), objects.LEVEL11() ) );*/
 
         levels = new ImmutableArray< Level >( levelArray );
     }
@@ -83,7 +83,7 @@ public final class DynamicLevels {
             if ( zoneNotInCurrentConnections( p ) ) {
                 Level level = levels.get( p );
 
-                if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+                if ( DEBUG.DYNAMIC_LEVELS ) {
                     Gdx.app.debug( "remove level", "" + level );
                 }
 
@@ -95,7 +95,7 @@ public final class DynamicLevels {
                 level.entity = null;
 
                 if ( level.objects != null ) {
-                    if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+                    if ( DEBUG.DYNAMIC_LEVELS ) {
                         Gdx.app.debug( "objects in " + p, "" + level.objects.size() );
                     }
                     for ( GameObject object : level.objects ) {
@@ -111,7 +111,7 @@ public final class DynamicLevels {
         for ( int p : previousConnections ) {
             //Gdx.app.debug( "try",""+p );
             if ( zoneNotInCurrentConnections( p ) ) {
-                if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+                if ( DEBUG.DYNAMIC_LEVELS ) {
                     Gdx.app.debug( "unload level", "" + ModelAsset.values()[ p ] );
                 }
                 ModelAsset.values()[ p ].unload();
@@ -123,7 +123,7 @@ public final class DynamicLevels {
                             for ( Asset asset : object.getAssets() ) {
                                 if ( !isModelInAnyCurrentConnections( asset ) ) {
                                     if ( asset != null ) {
-                                        if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+                                        if ( DEBUG.DYNAMIC_LEVELS ) {
                                             Gdx.app.debug( "unload object", "" + asset );
                                         }
                                         asset.unload();
@@ -157,7 +157,7 @@ public final class DynamicLevels {
                     if ( object.getAssets() != null ) {
                         for ( Asset asset : object.getAssets() ) {
                             if ( asset == someAsset ) {
-                                if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+                                if ( DEBUG.DYNAMIC_LEVELS ) {
                                     Gdx.app.debug( "" + someAsset, "in current set" );
                                 }
                                 return true;
@@ -168,7 +168,7 @@ public final class DynamicLevels {
             }
         }
 
-        if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+        if ( DEBUG.DYNAMIC_LEVELS ) {
             Gdx.app.debug( "" + someAsset, "NOT in current set" );
         }
         return false;
@@ -187,7 +187,7 @@ public final class DynamicLevels {
                 currentConnections.add( i );
             }
 
-            if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+            if ( DEBUG.DYNAMIC_LEVELS ) {
                 Gdx.app.debug( "Current connections updated", "" + currentConnections );
             }
         }
@@ -201,7 +201,7 @@ public final class DynamicLevels {
 
 
     private static void loadNewModels () {
-        if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+        if ( DEBUG.DYNAMIC_LEVELS ) {
             Gdx.app.debug( "loadNewModels", "start" );
         }
         for ( int i : currentConnections ) {
@@ -225,7 +225,7 @@ public final class DynamicLevels {
 
 
     private static void buildEntities () {
-        if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+        if ( DEBUG.DYNAMIC_LEVELS ) {
             Gdx.app.debug( "buildEntities", "start" );
         }
         for ( int i : currentConnections ) {
@@ -236,7 +236,7 @@ public final class DynamicLevels {
             thisLevel.calculateBoundingBox();
 
             if ( level.entity == null ) {
-                if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+                if ( DEBUG.DYNAMIC_LEVELS ) {
                     Gdx.app.debug( "Need to build LEVEL", "" + thisLevel );
                 }
                 level.entity = new EntityBuilder().createGround( thisLevel );
@@ -284,7 +284,7 @@ public final class DynamicLevels {
                 needToUpdate = false;
                 if ( needToBuild ) {
 
-                    if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+                    if ( DEBUG.DYNAMIC_LEVELS ) {
                         Gdx.app.debug( "Dynamic levels update", "needToBuild" );
                     }
 
@@ -299,7 +299,7 @@ public final class DynamicLevels {
             unloadDelay -= delta;
             if ( unloadDelay <= 0 ) {
 
-                if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+                if ( DEBUG.DYNAMIC_LEVELS ) {
                     Gdx.app.debug( "unloadDelay", "tick (dynamic levels)" );
                 }
 
@@ -319,7 +319,7 @@ public final class DynamicLevels {
     public static void setCurrent ( int id ) {
         current = id;
 
-        if ( DEBUG.DYNAMIC_LEVELS.get() ) {
+        if ( DEBUG.DYNAMIC_LEVELS ) {
             Gdx.app.debug( "Now current id", "" + current );
         }
     }

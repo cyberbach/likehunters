@@ -10,7 +10,6 @@ import com.badlogic.gdx.physics.bullet.collision.btTriangleIndexVertexArray;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 
-import net.overmy.likehunters.Core;
 import net.overmy.likehunters.DEBUG;
 import net.overmy.likehunters.ashley.component.PhysicalBVHComponent;
 import net.overmy.likehunters.ashley.component.PhysicalComponent;
@@ -34,7 +33,7 @@ public class MyEntityListener implements EntityListener {
 
     @Override
     public void entityAdded ( Entity entity ) {
-        if ( DEBUG.ENTITIES.get() ) {
+        if ( DEBUG.ENTITIES ) {
             log.setLength( 0 );
             if ( MyMapper.TYPE.has( entity ) ) {
                 log.append( MyMapper.TYPE.get( entity ).type.toString() );
@@ -105,12 +104,12 @@ public class MyEntityListener implements EntityListener {
             log.append( " " );
         }
 */
-        if ( DEBUG.ENTITIES.get() ) {
+        if ( DEBUG.ENTITIES ) {
             if ( "DecalComponent".equals(
                     entity.getComponents()
                           .get( 0 )
                           .getClass()
-                          .getSimpleName() ) && !DEBUG.DECAL_ENTITIES.get() ) {
+                          .getSimpleName() ) && !DEBUG.DECAL_ENTITIES ) {
                 return;
             }
 
@@ -132,7 +131,7 @@ public class MyEntityListener implements EntityListener {
 
     @Override
     public void entityRemoved ( Entity entity ) {
-        if ( DEBUG.ENTITIES.get() ) {
+        if ( DEBUG.ENTITIES ) {
             log.setLength( 0 );
             if ( MyMapper.TYPE.has( entity ) ) {
                 log.append( MyMapper.TYPE.get( entity ).type.toString() );
@@ -147,7 +146,7 @@ public class MyEntityListener implements EntityListener {
         if ( MyMapper.PHYSICAL.has( entity ) ) {
 
             PhysicalComponent physicalComponent = MyMapper.PHYSICAL.get( entity );
-            if ( DEBUG.ENTITIES.get() ) {
+            if ( DEBUG.ENTITIES ) {
                 log.append( " UV=" );
                 log.append( physicalComponent.body.getUserValue() );
                 log.append( " " );
@@ -178,12 +177,12 @@ public class MyEntityListener implements EntityListener {
             }
         }
 
-        if ( DEBUG.ENTITIES.get() ) {
+        if ( DEBUG.ENTITIES ) {
             if ( "DecalComponent".equals(
                     entity.getComponents()
                           .get( 0 )
                           .getClass()
-                          .getSimpleName() ) && !DEBUG.DECAL_ENTITIES.get() ) {
+                          .getSimpleName() ) && !DEBUG.DECAL_ENTITIES ) {
                 return;
             }
 
