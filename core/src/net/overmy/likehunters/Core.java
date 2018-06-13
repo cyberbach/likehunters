@@ -10,9 +10,10 @@ import com.badlogic.gdx.math.Vector3;
 public final class Core {
     public static final float FADE = 0.5f;
 
-    public static final Color BG_COLOR          = new Color( 0.4f, 0.4f, 0.4f, 1 );
-    public static final Color LOADING_BAR_COLOR = new Color( 0.8f, 0.4f, 0.4f, 1 );
-    public static final Color TINT              = new Color( 0.8f, 0.3f, 0.0f, 1 );
+    public static final Color BG_COLOR          = new Color( 0.4f, 0.4f, 0.4f, 1.0f );
+    public static final Color LOADING_BAR_COLOR = new Color( 0.8f, 0.4f, 0.4f, 1.0f );
+    public static final Color TINT              = new Color( 0.8f, 0.3f, 0.0f, 1.0f );
+    public static final Color AMBIENT_COLOR     = new Color( 0.6f, 0.6f, 0.6f, 1.0f );
 
     public static int WIDTH;
     public static int HEIGHT;

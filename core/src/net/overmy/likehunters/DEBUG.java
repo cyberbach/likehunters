@@ -8,6 +8,7 @@ public final class DEBUG {
     public static boolean WINDOWS      = true;
     public static boolean SETTINGS     = false;
     public static boolean ENGLISH_TEXT = false;
+    public static boolean FPS          = true;
 
     // 2d screen info
     public static boolean BASE_SCREEN = false;
@@ -15,13 +16,14 @@ public final class DEBUG {
 
     // 3d loading stuff
     public static boolean SHOW_MODEL_INFO = false;
+    public static boolean SHADERS         = true;
 
     // bullet
     public static boolean DYNAMIC_LEVELS = false;
     public static boolean PHYSICAL_MESH  = false;
 
     // ashley
-    public static boolean NPC_ACTIONS    = true;
+    public static boolean NPC_ACTIONS    = false;
     public static boolean CONTACTS       = false;
     public static boolean ENTITIES       = true;
     public static boolean DECAL_ENTITIES = false;
@@ -32,9 +34,9 @@ public final class DEBUG {
 
 
     public static boolean anything () {
-        boolean sectionMain = WINDOWS || SETTINGS || ENGLISH_TEXT;
+        boolean sectionMain = WINDOWS || SETTINGS || ENGLISH_TEXT || FPS;
         boolean section2d = BASE_SCREEN || STAGE;
-        boolean section3d = SHOW_MODEL_INFO;
+        boolean section3d = SHOW_MODEL_INFO | SHADERS;
         boolean sectionBullet = DYNAMIC_LEVELS || PHYSICAL_MESH;
         boolean sectionAshley = NPC_ACTIONS || CONTACTS || ENTITIES || DECAL_ENTITIES;
         return sectionMain || section2d || section3d || sectionBullet || sectionAshley;

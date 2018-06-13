@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject.CollisionFlags;
 import com.badlogic.gdx.physics.bullet.dynamics.btFixedConstraint;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 
@@ -46,7 +47,7 @@ public final class MyCameraPhysics {
                 .setMass( 0.01f )
                 .setPosition( cameraBodyOffset )
                 .capsuleShape( 1.2f, 0.0f )
-                .setCollisionFlag( btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK )
+                .setCollisionFlag( CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK )
                 .setCallbackFlag( BulletWorld.CAMERA_FLAG )
                 .setCallbackFilter( BulletWorld.GROUND_FLAG )
                 .build();
@@ -61,7 +62,7 @@ public final class MyCameraPhysics {
                 .defaultMotionState()
                 .setMass( 20.0f )
                 .capsuleShape( 0.2f, 0 )
-                .setCollisionFlag( btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK )
+                .setCollisionFlag( CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK )
                 .setCallbackFlag( BulletWorld.CAMERA_FLAG )
                 .setCallbackFilter( 0 )
                 .disableRotation()
@@ -101,15 +102,10 @@ public final class MyCameraPhysics {
         }
 
         BulletWorld.removeConstraint( constraint );
-        if ( constraint != null ) {
-            constraint.dispose();
-        }
-        constraint = null;
-        targetBody = null;
-
         BulletWorld.removeBody( cameraPhysicalGhostSMALLBody );
         BulletWorld.removeBody( cameraPhysicalBIGBody );
 
+        constraint = null;
         cameraPhysicalGhostSMALLBody = null;
         cameraPhysicalBIGBody = null;
         targetBody = null;
@@ -118,14 +114,14 @@ public final class MyCameraPhysics {
     }
 
 
-    public static void rotate ( float offsetAngle ) {
+    public static void rotate ( float angle ) {
         Matrix4 ghostTransform = cameraPhysicalGhostSMALLBody.getWorldTransform();
 
         // get
         ghostTransform.getTranslation( tempPositionForRotation );
 
         // set
-        tempTransformForRotate.setToRotation( Vector3.Y, offsetAngle );
+        tempTransformForRotate.setToRotation( Vector3.Y, angle );
         tempTransformForRotate.translate( tempPositionForRotation );
 
         // save transform

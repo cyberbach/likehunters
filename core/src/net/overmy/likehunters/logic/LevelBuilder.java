@@ -29,6 +29,20 @@ class LevelBuilder {
         objects.add( new TriggerObject( TRIGGER.TRIGGER_GAMEINTRO,
                                         new Vector3( -1.5443124f, -2.0000188f, -5.023402f ), 5 ) );
 
+        objects.add( createNPC( -9.281758f, 3.0000157f, -23.482405f,
+                                ModelAsset.BALL1,
+                                ScriptBuilder.BALL1_MOVE_ON_LEVEL1(),
+                                SoundAsset.NPC_STEP ) );
+
+        objects.add( createNPC( 9.488587f, 4f, -25.605047f, ModelAsset.MONSTER1,
+                                ScriptBuilder.MONSTER1_MOVE_ON_LEVEL1(),
+                                SoundAsset.NPC_STEP ) );
+
+        objects.add( createNPC( -32.800106f, 4f, -73.38079f,
+                                ModelAsset.DRAKON1,
+                                ScriptBuilder.DRAKON1_MOVE_ON_LEVEL4(),
+                                SoundAsset.PLAYER_STEP ) );
+
         return objects;
     }
 

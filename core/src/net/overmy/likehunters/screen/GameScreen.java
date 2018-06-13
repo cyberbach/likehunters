@@ -3,11 +3,13 @@ package net.overmy.likehunters.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import net.overmy.likehunters.Core;
 import net.overmy.likehunters.DEBUG;
 import net.overmy.likehunters.MyGdxGame;
 import net.overmy.likehunters.ashley.AshleyWorld;
+import net.overmy.likehunters.ashley.system.RenderSystem;
 import net.overmy.likehunters.bullet.BulletWorld;
 import net.overmy.likehunters.logic.DynamicLevels;
 
@@ -37,6 +39,10 @@ public class GameScreen extends BaseScreen {
     }
 
 
+    float startTime;
+    private StringBuilder log = new StringBuilder();
+
+
     @Override
     public void update ( float delta ) {
         super.update( delta );
@@ -44,6 +50,38 @@ public class GameScreen extends BaseScreen {
         DynamicLevels.update( delta );
         AshleyWorld.update( delta );
         MyCamera.update( delta );
+
+        if ( DEBUG.FPS ) {
+            if ( TimeUtils.nanoTime() - startTime > 1000000000 ) /* 1,000,000,000ns == one second */ {
+                log.setLength( 0 );
+                log.append( "▓▒░ FPS = " );
+                log.append( Gdx.graphics.getFramesPerSecond() );
+                log.append( " " );
+
+                RenderSystem rend = AshleyWorld.getEngine().getSystem( RenderSystem.class );
+                int models = rend.getVisibleModelsCount();
+                int totalModels = rend.getTotalModelsCount();
+                log.append( " Models=" );
+                log.append( models );
+                log.append( "/" );
+                log.append( totalModels );
+/*
+
+                DecalSystem decalSystem = AshleyWorld.getEngine().getSystem( DecalSystem.class );
+                log.append( " Decals=" );
+                log.append( decalSystem.getVisibleDecalCount() );
+                log.append( "/" );
+                log.append( decalSystem.getDecalCount() );
+*/
+
+                log.append( " ░▒▓" );
+
+                Gdx.app.log( "", log.toString() );
+                startTime = TimeUtils.nanoTime();
+
+                //fpsLabel.setText( log.toString() );
+            }
+        }
     }
 
 

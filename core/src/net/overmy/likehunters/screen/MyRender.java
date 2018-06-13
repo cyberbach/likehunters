@@ -2,12 +2,14 @@ package net.overmy.likehunters.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -16,6 +18,8 @@ import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
 import com.badlogic.gdx.graphics.g3d.decals.GroupStrategy;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
+import com.badlogic.gdx.graphics.g3d.utils.ShaderProvider;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -43,6 +47,8 @@ public final class MyRender {
     private static Sprite        overlappingFullScreen = null; // этот спрайт перекрывает весь экран
     private static Color         transitionColor       = null;
 
+    static ShaderProgram toonShaderProgram;
+
 
     private MyRender () {
     }
@@ -67,13 +73,11 @@ public final class MyRender {
         stage = new Stage( viewport, spriteBatch );
         stage.setDebugAll( DEBUG.STAGE );
 
-
         MyCamera.init();
 
         final GroupStrategy groupStrategy = new CameraGroupStrategy(
                 MyCamera.getPerspectiveCamera() );
         decalBatch = new DecalBatch( groupStrategy );
-
 
         overlappingFullScreen = createBGSprite();
         transition = new FloatAnimator( 1, 1, 0 );
@@ -85,17 +89,63 @@ public final class MyRender {
         config.numPointLights = 0;
         config.numBones = 16;
 
-        modelBatch = new ModelBatch( new DefaultShaderProvider( config ) );
+        ShaderProvider myShaderProvider = new DefaultShaderProvider( config );
+
+        modelBatch = new ModelBatch( myShaderProvider );
+
         environment = new Environment();
 
-        final Color ambientColor = new Color( 0.4f, 0.4f, 0.4f, 1.0f );
-        final Attribute defaultEnvLight;
-        defaultEnvLight = new ColorAttribute( ColorAttribute.AmbientLight, ambientColor );
-        environment.set( defaultEnvLight );
-
-        final Attribute fog = new ColorAttribute( ColorAttribute.Fog, 0, 0, 0, 1f );
-        environment.set( fog );
+        environment.set( new ColorAttribute( ColorAttribute.AmbientLight, Core.AMBIENT_COLOR ) );
+        environment.set( new ColorAttribute( ColorAttribute.Fog, Core.BG_COLOR ) );
         environment.add( MyCamera.getLight() );
+
+        // TOON
+        // Initialization
+        toonShaderProgram = new ShaderProgram(
+                Gdx.files.internal( "shader/toonify.vertex.glsl" ),
+                Gdx.files.internal( "shader/toonify.fragment.glsl" ) );
+
+        ShaderProgram.pedantic = false;
+
+        Gdx.app.debug( "Shader log", toonShaderProgram.getLog() );
+    }
+
+
+    public static Mesh createFullScreenQuad () {
+        float[] verts = new float[ 20 ];
+        int i = 0;
+        verts[ i++ ] = -1.f; // x1
+        verts[ i++ ] = -1.f; // y1
+        verts[ i++ ] = 0;
+        verts[ i++ ] = 0.f; // u1
+        verts[ i++ ] = 0.f; // v1
+
+        verts[ i++ ] = 1.f; // x2
+        verts[ i++ ] = -1.f; // y2
+        verts[ i++ ] = 0;
+        verts[ i++ ] = 1.f; // u2
+        verts[ i++ ] = 0.f; // v2
+
+        verts[ i++ ] = 1.f; // x3
+        verts[ i++ ] = 1.f; // y2
+        verts[ i++ ] = 0;
+        verts[ i++ ] = 1.f; // u3
+        verts[ i++ ] = 1.f; // v3
+
+        verts[ i++ ] = -1.f; // x4
+        verts[ i++ ] = 1.f; // y4
+        verts[ i++ ] = 0;
+        verts[ i++ ] = 0.f; // u4
+        verts[ i++ ] = 1.f; // v4
+
+        Mesh tmpMesh = new Mesh(
+                true, 4, 6,
+                new VertexAttribute( Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE ),
+                new VertexAttribute( Usage.TextureCoordinates, 2,
+                                     ShaderProgram.TEXCOORD_ATTRIBUTE + "0" ) );
+        tmpMesh.setVertices( verts );
+        tmpMesh.setIndices( new short[] { 0, 1, 2, 2, 3, 0 } );
+        return tmpMesh;
     }
 
 
@@ -192,5 +242,13 @@ public final class MyRender {
 
         environment = null;
         transitionColor = null;
+
+        toonShaderProgram.dispose();
+        toonShaderProgram = null;
+    }
+
+
+    public static ShaderProgram getToonShaderProgram () {
+        return toonShaderProgram;
     }
 }
